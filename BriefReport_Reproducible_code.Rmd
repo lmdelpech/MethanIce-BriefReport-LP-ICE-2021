@@ -19,7 +19,7 @@ knitr::opts_chunk$set(echo = TRUE)
 # Documentation
 
 This script aims at reproducing figures and analyses published in the manuscript "Anoxic water-ice interfaces of an emerged cold seep host chemoautotrophic microorganisms" <>.
-It takes as input the published ASV table <>, output from the DADA2 pipeline.  
+It takes as input the published ASV table <>, output from the DADA2 pipeline. Alternatively, the DADA2 pipeline is given, and the raw sequences cam be downloaded from the NCBI SRA database, accession numbers SRR24977479-SRR24977560.
 
 Section 0 provides internal functions run in the script with their documentation.
 The first section wrangles data, removing contaminant sequences and unwanted lineages, adding sample information to `phyloseq` objects, and performing rarefaction for the following analyses.  
@@ -45,7 +45,7 @@ require(multcompView)
 
 ## 0.2-Internal functions
 
-If using those functions, please cite <>...
+If using those functions, please cite <>.
 
 The `parseAmplicon` function takes as input the path to the main file created by the pipeline presented below in section 1.1, the ASV table with their taxonomic affiliation (named in the pipeline `$name.ASV.taxonomy.txt`). The second input `output_name` is the denominator to give to the output files. 
 The function splits the table into an ASV table and a taxonomy table, the taxonomy is parsed, and unwanted lineages are removed (Eukaryotes or unclassified lineages, mitochondrial and chloroplast reads). 
@@ -322,7 +322,7 @@ module load QIIME2/2021.8
 
 
 # Database for taxonomy
-REFDIR=path/to/Silva/Databases/Silva_138/silva.nr_v138_1.align # Downloaded from https://mothur.org/blog/2021/SILVA-v138_1-reference-files/
+REFDIR=/path/to/Silva/Databases/Silva_138/silva.nr_v138_1.align # Downloaded from https://mothur.org/blog/2021/SILVA-v138_1-reference-files/
 TAXDIR=/path/to/Silva/Databases/Silva_138/silva.nr_v138_1.tax 
 
 
