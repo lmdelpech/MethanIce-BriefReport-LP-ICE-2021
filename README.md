@@ -9,7 +9,7 @@ Author: Lisa-Marie Delpech
 
 ### Source code
 
-[BriefReport_Reproducible_code](https://github.com/lmdelpech/MethanIce-BriefReport-LP-ICE-2021/blob/main/BriefReport_Reproducible_code.Rmd) - Reproducible code as provided an R markdown file. It contains:  
+[BriefReport_Reproducible_code](https://github.com/lmdelpech/MethanIce-BriefReport-LP-ICE-2021/blob/main/BriefReport_Reproducible_code.Rmd) - Reproducible code provided as an R markdown file. It contains:  
 
 * 0-Source functions: A section compiling custom functions used downstream in the code. If reusing these function, please cite the corresponding repository or article. 
 * 1-Data wrangling: Reproductible code for generation of ASVs and parsing of the ASV table. The ASV table resulting from that step has further been deposited on [UiT Dataverse](). 
