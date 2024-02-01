@@ -1,38 +1,133 @@
----
-title: "MethanIce_BriefReport_Reproducible_Code"
-author: "Lisa-Marie Delpech"
-date: "2023-09-12"
-output:
-  github_document:
-    toc: true
-  html_document: 
-    toc: yes
-    number_sections: no
-    highlight: pygments
-    code_folding: 'show'
----
+MethanIce_BriefReport_Reproducible_Code
+================
+Lisa-Marie Delpech
+2023-09-12
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+- <a href="#documentation" id="toc-documentation">Documentation</a>
+- <a href="#0-source-functions" id="toc-0-source-functions">0-Source
+  functions</a>
+  - <a href="#01-packages" id="toc-01-packages">0.1-Packages</a>
+  - <a href="#02-internal-functions"
+    id="toc-02-internal-functions">0.2-Internal functions</a>
+- <a href="#1-data-wrangling" id="toc-1-data-wrangling">1-Data
+  wrangling</a>
+  - <a href="#11-sequence-processing-pipeline"
+    id="toc-11-sequence-processing-pipeline">1.1-Sequence processing
+    pipeline</a>
+  - <a href="#12-import-data-in-r-and-parse-taxonomy"
+    id="toc-12-import-data-in-r-and-parse-taxonomy">1.2-Import data in R and
+    parse taxonomy</a>
+  - <a href="#13-data-wrangling" id="toc-13-data-wrangling">1.3-Data
+    wrangling</a>
+    - <a href="#131-remove-control-sequences"
+      id="toc-131-remove-control-sequences">1.3.1-Remove control sequences</a>
+    - <a href="#132-format-column-names"
+      id="toc-132-format-column-names">1.3.2-Format column names</a>
+    - <a href="#134-remove-singletons"
+      id="toc-134-remove-singletons">1.3.4-Remove singletons</a>
+  - <a href="#14-rarefaction" id="toc-14-rarefaction">1.4-Rarefaction</a>
+    - <a href="#141-library-sizes" id="toc-141-library-sizes">1.4.1-Library
+      sizes</a>
+    - <a href="#142-rarefaction-curves"
+      id="toc-142-rarefaction-curves">1.4.2-Rarefaction curves</a>
+    - <a href="#143-import-in-phyloseq"
+      id="toc-143-import-in-phyloseq">1.4.3-Import in
+      <code>phyloseq</code></a>
+    - <a href="#144-rarefy-to-even-depth"
+      id="toc-144-rarefy-to-even-depth">1.4.4-Rarefy to even depth</a>
+  - <a href="#15-add-sample-metadata"
+    id="toc-15-add-sample-metadata">1.5-Add sample metadata</a>
+- <a href="#2-beta-diversity-and-16s-counts-figure-1a"
+  id="toc-2-beta-diversity-and-16s-counts-figure-1a">2-Beta diversity and
+  16S counts: <strong>Figure 1A</strong></a>
+  - <a href="#21-test-group-differences-supplementary-information"
+    id="toc-21-test-group-differences-supplementary-information">2.1-Test
+    group differences (<strong>Supplementary Information</strong>)</a>
+    - <a href="#211-dna" id="toc-211-dna">2.1.1-DNA</a>
+    - <a href="#212-cdna" id="toc-212-cdna">2.1.2-cDNA</a>
+  - <a href="#22-ordination-figure-1a"
+    id="toc-22-ordination-figure-1a">2.2-Ordination (<strong>Figure
+    1A</strong>)</a>
+    - <a
+      href="#221-rarefaction-of-a-combined-dnacdna-dataset-to-compare-beta-diversity"
+      id="toc-221-rarefaction-of-a-combined-dnacdna-dataset-to-compare-beta-diversity">2.2.1-Rarefaction
+      of a combined DNA/cDNA dataset to compare beta diversity</a>
+    - <a href="#222-16s-dna-quantification-with-qpcr-data"
+      id="toc-222-16s-dna-quantification-with-qpcr-data">2.2.2-16S DNA
+      quantification with qPCR data</a>
+    - <a href="#223-pca-figure-1a" id="toc-223-pca-figure-1a">2.2.3-PCA Figure
+      1A</a>
+  - <a href="#23-16s-count-statistics-supplementary-information"
+    id="toc-23-16s-count-statistics-supplementary-information">2.3-16S count
+    statistics (<strong>Supplementary Information</strong>)</a>
+- <a href="#3-alpha-diversity-figure-1b"
+  id="toc-3-alpha-diversity-figure-1b">3-Alpha diversity: <strong>Figure
+  1B</strong></a>
+  - <a href="#31-compute-alpha-diversity-for-both-datasets"
+    id="toc-31-compute-alpha-diversity-for-both-datasets">3.1-Compute alpha
+    diversity for both datasets</a>
+  - <a href="#32-test-for-group-differences-in-alpha-diversity"
+    id="toc-32-test-for-group-differences-in-alpha-diversity">3.2-Test for
+    group differences in alpha diversity</a>
+  - <a href="#33-plot-alpha-diversity-figure-1b"
+    id="toc-33-plot-alpha-diversity-figure-1b">3.3-Plot alpha diversity
+    (<strong>Figure 1B</strong>)</a>
+- <a href="#4-taxonomic-composition-figure-1c"
+  id="toc-4-taxonomic-composition-figure-1c">4-Taxonomic composition:
+  <strong>Figure 1C</strong></a>
+  - <a href="#41-transform-sample-counts"
+    id="toc-41-transform-sample-counts">4.1-Transform sample counts</a>
+  - <a href="#42-taxonomy-color-dataframe"
+    id="toc-42-taxonomy-color-dataframe">4.2-Taxonomy color dataframe</a>
+  - <a href="#43-taxonomy-barplot-figure-1c"
+    id="toc-43-taxonomy-barplot-figure-1c">4.3-Taxonomy barplot
+    (<strong>Figure 1C</strong>)</a>
+  - <a href="#44-chloroplast-reads-figure-1c"
+    id="toc-44-chloroplast-reads-figure-1c">4.4-Chloroplast reads
+    (<strong>Figure 1C</strong>)</a>
+  - <a
+    href="#45-abundance-of-sulfurimonas-and-thiomicrorhabdus-dominant-asvs"
+    id="toc-45-abundance-of-sulfurimonas-and-thiomicrorhabdus-dominant-asvs">4.5-Abundance
+    of <em>Sulfurimonas</em> and <em>Thiomicrorhabdus</em> dominant ASVs</a>
+  - <a href="#45-anme-srb-correlations-supplementary-information"
+    id="toc-45-anme-srb-correlations-supplementary-information">4.5-ANME-SRB
+    correlations: <strong>Supplementary Information</strong></a>
+    - <a href="#451-plot-anme-and-seep-srb1-abundances"
+      id="toc-451-plot-anme-and-seep-srb1-abundances">4.5.1. Plot ANME and
+      SEEP-SRB1 abundances</a>
+    - <a href="#452-dna" id="toc-452-dna">4.5.2. DNA</a>
+    - <a href="#452-cdna" id="toc-452-cdna">4.5.2. cDNA</a>
+  - <a href="#46-dnacdna-discrepancy-for-srso"
+    id="toc-46-dnacdna-discrepancy-for-srso">4.6-DNA/cDNA discrepancy for
+    SR/SO</a>
 
 # Documentation
 
-This script aims at reproducing figures and analyses published in the manuscript "Anoxic water-ice interfaces of an emerged cold seep host chemoautotrophic microorganisms" <>.
-It takes as input the published ASV table <>, output from the DADA2 pipeline. Alternatively, the DADA2 pipeline is given, and the raw sequences cam be downloaded from the NCBI SRA database, accession numbers SRR24977479-SRR24977560.
+This script aims at reproducing figures and analyses published in the
+manuscript “Anoxic water-ice interfaces of an emerged cold seep host
+chemoautotrophic microorganisms” \<\>. It takes as input the published
+ASV table \<\>, output from the DADA2 pipeline. Alternatively, the DADA2
+pipeline is given, and the raw sequences cam be downloaded from the NCBI
+SRA database, accession numbers SRR24977479-SRR24977560.
 
-Section 0 provides internal functions run in the script with their documentation.
-The first section wrangles data, removing contaminant sequences and unwanted lineages, adding sample information to `phyloseq` objects, and performing rarefaction for the following analyses.  
+Section 0 provides internal functions run in the script with their
+documentation. The first section wrangles data, removing contaminant
+sequences and unwanted lineages, adding sample information to `phyloseq`
+objects, and performing rarefaction for the following analyses.
 
-The second section examines diversity and reproduces **Figure 1A** of the manuscript (beta diversity), the third section reproduces **Figure 1B** (alpha diversity), and the fourth section examines taxonomic composition and reproduces **Figure 1C**. Numbers presented in the Brief Report and its **Supplementary Information** are also given. 
+The second section examines diversity and reproduces **Figure 1A** of
+the manuscript (beta diversity), the third section reproduces **Figure
+1B** (alpha diversity), and the fourth section examines taxonomic
+composition and reproduces **Figure 1C**. Numbers presented in the Brief
+Report and its **Supplementary Information** are also given.
 
-Built with R `r getRversion()`.
+Built with R 4.2.2.
 
 # 0-Source functions
 
 ## 0.1-Packages
 
-```{r Packages, message = FALSE}
+``` r
 require(tidyverse)
 require(ggsci)
 require(vegan)
@@ -45,12 +140,18 @@ require(multcompView)
 
 ## 0.2-Internal functions
 
-If using those functions, please cite <>.
+If using those functions, please cite \<\>.
 
-The `parseAmplicon` function takes as input the path to the main file created by the pipeline presented below in section 1.1, the ASV table with their taxonomic affiliation (named in the pipeline `$name.ASV.taxonomy.txt`). The second input `output_name` is the denominator to give to the output files. 
-The function splits the table into an ASV table and a taxonomy table, the taxonomy is parsed, and unwanted lineages are removed (Eukaryotes or unclassified lineages, mitochondrial and chloroplast reads). 
+The `parseAmplicon` function takes as input the path to the main file
+created by the pipeline presented below in section 1.1, the ASV table
+with their taxonomic affiliation (named in the pipeline
+`$name.ASV.taxonomy.txt`). The second input `output_name` is the
+denominator to give to the output files. The function splits the table
+into an ASV table and a taxonomy table, the taxonomy is parsed, and
+unwanted lineages are removed (Eukaryotes or unclassified lineages,
+mitochondrial and chloroplast reads).
 
-```{r parseAmplicon function for reading DADA2 output}
+``` r
 parseAmplicon <- function(path, output_name = "ASV"){
   require(tidyverse)
   
@@ -91,14 +192,16 @@ parseAmplicon <- function(path, output_name = "ASV"){
 }
 ```
 
+The `plotRarecurves` function takes an ASV table as input and returns a
+plot of rarefaction curves. Arguments:  
+\* `df` is the ASV table with ASV names as rownames, sample names as
+column names.  
+\* `col` corresponds to the colors od the curves for each sample. A
+vector of length `ncol(df)` containing color names of hexadecimal
+colors.  
+\* `label` a boolean, should sample labels be plot?
 
-The `plotRarecurves` function takes an ASV table as input and returns a plot of rarefaction curves. 
-Arguments:   
-*  `df` is the ASV table with ASV names as rownames, sample names as column names.  
-*  `col` corresponds to the colors od the curves for each sample. A vector of length `ncol(df)` containing color names of hexadecimal colors.  
-*  `label` a boolean, should sample labels be plot?
-
-```{r plotRarecurves function}
+``` r
 plotRarecurves <- function(df,col=rep("black",nrow(df)),label=TRUE){
   require(vegan)
   require(ggplot2)
@@ -138,7 +241,7 @@ plotRarecurves <- function(df,col=rep("black",nrow(df)),label=TRUE){
 }
 ```
 
-```{r Internal functions for statistics}
+``` r
 # Normality
 modified_shapiro_test <- function(x){
   result <- shapiro.test(x)
@@ -168,17 +271,20 @@ modified_dunn_test <- function(x,g,method){
 }
 ```
 
+Documentation for the `ggPCA` function is provided in the source code.
 
-Documentation for the ``ggPCA`` function is provided in the source code.  
-
-```{r ggPCA function}
+``` r
 source("./R_Functions/ggPCA.R")
 ```
 
+    ## Loading required package: ggrepel
 
-The `plotAbundance` takes as main input a `phyloseq` object and is able to return a barplot of the *n* most abundant taxa (ASVs, OTUs, or other taxonomic ranks). The barplot can be plot at different taxonomic levels as well. 
+The `plotAbundance` takes as main input a `phyloseq` object and is able
+to return a barplot of the *n* most abundant taxa (ASVs, OTUs, or other
+taxonomic ranks). The barplot can be plot at different taxonomic levels
+as well.
 
-```{r plotAbundance function}
+``` r
 #=========Documentation=========
 # Author: Lisa-Marie Delpech
 # physeq: a phyloseq object with at least otu and taxonomy tables
@@ -272,8 +378,7 @@ plotAbundance <- function(physeq,x = Sample,
 }
 ```
 
-
-```{r Taxonomy search functions}
+``` r
 # Define a function to search for a taxon in a rank of the taxonomy table of a physeq object
 searchTaxa <- function(physeq, taxon, rank){
   tax <- physeq %>% 
@@ -298,12 +403,11 @@ subsetPhyseq <- function(physeq, asv){
 }
 ```
 
-
 # 1-Data wrangling
 
 ## 1.1-Sequence processing pipeline
 
-```{bash MiSeq SOP, eval = FALSE}
+``` bash
 #!/usr/bin/env bash
 
 ########################################
@@ -424,11 +528,12 @@ exit
 ```
 
 Inspect DADA2 denoising statistics.
-```{r Load DADA2 statistic table}
-dada2.stats <- read.table("./16S_2022_Sequencing_data/16S_Bact.DADA2.stats.tsv", sep = "\t", header = TRUE)
-``` 
 
-```{r DADA2 stats, fig.dim = c(8,5)}
+``` r
+dada2.stats <- read.table("./16S_2022_Sequencing_data/16S_Bact.DADA2.stats.tsv", sep = "\t", header = TRUE)
+```
+
+``` r
 # Plot number of reads stats
 dada2.stats %>% 
   pivot_longer(cols = !sample.id, values_to = "Stat", names_to = "Step") %>% 
@@ -447,15 +552,19 @@ dada2.stats %>%
   scale_x_discrete(labels = c("Input", "Filtered","Denoised", "Merged","Non chimeric"))
 ```
 
+![](BriefReport_Reproducible_code_files/figure-gfm/DADA2%20stats-1.png)<!-- -->
+
 ## 1.2-Import data in R and parse taxonomy
 
-```{r Import ASV table and parse taxonomy}
+``` r
 parseAmplicon("./16S_2022_Sequencing_data/16S_Bact.ASV.taxonomy.txt", output_name = "16S_2022_Sequencing_data/ASV")
 raw0 <- read.table(file = "./16S_2022_Sequencing_data/16S_Bact.ASV.taxonomy.txt", header = TRUE, sep = "\t", comment.char = "", skip = 1) %>% rename(OTU.ID = "X.OTU.ID")
 ```
 
-Compute statistics about read counts after each steps of the parsing steps (removal of unwanted lineages).  
-```{r Output stats removed lineages}
+Compute statistics about read counts after each steps of the parsing
+steps (removal of unwanted lineages).
+
+``` r
 raw0a <- raw0[grep("Bacteria|Archaea", raw0$taxonomy),] # Remove Eukaryotes or unclassified lineages
 raw0b <- raw0a[-grep("[mM]itochondria|[cC]hloroplast", raw0a$taxonomy),]
 
@@ -465,8 +574,17 @@ write.table(chloroplasts, "./16S_2022_Sequencing_data/Chloroplasts.txt", sep = "
 
 # Stats about removed lineages
 nrow(raw0a)/nrow(raw0)*100 # % of Bacteria|Archaea in ASVs
-nrow(raw0b)/nrow(raw0)*100 # % without mitochondria and chloroplasts
+```
 
+    ## [1] 98.52172
+
+``` r
+nrow(raw0b)/nrow(raw0)*100 # % without mitochondria and chloroplasts
+```
+
+    ## [1] 97.33451
+
+``` r
 bact.arch <- raw0a %>% as_tibble() %>% column_to_rownames(var = "OTU.ID") %>% select(-taxonomy) %>% colSums() %>% 
   as.data.frame() %>% 
   rownames_to_column(var = "sample.id") %>% 
@@ -480,7 +598,7 @@ mit.chl <- raw0b %>% as_tibble() %>% column_to_rownames(var = "OTU.ID") %>% sele
   mutate(sample.id = str_replace(sample.id, pattern = "\\.", "-"))
 ```
 
-```{r SI read statistics}
+``` r
 dada2.stats %>% 
   full_join(bact.arch, by = "sample.id") %>% 
   full_join(mit.chl, by = "sample.id") %>% 
@@ -499,17 +617,46 @@ dada2.stats %>%
   summarize(Mean_percentage_per_sample = mean(Stat))
 ```
 
+    ## `summarise()` has grouped output by 'Dataset'. You can override using the
+    ## `.groups` argument.
+
+    ## # A tibble: 14 × 3
+    ## # Groups:   Dataset [2]
+    ##    Dataset Step                              Mean_percentage_per_sample
+    ##    <chr>   <fct>                                                  <dbl>
+    ##  1 DNA     percentage.of.input.passed.filter                     78.4  
+    ##  2 DNA     percentage.denoised                                   76.8  
+    ##  3 DNA     percentage.of.input.merged                            70.7  
+    ##  4 DNA     percentage.of.input.non.chimeric                      67.1  
+    ##  5 DNA     percentage.removed.lineages                           66.2  
+    ##  6 DNA     percentage.mtch.chl                                   65.6  
+    ##  7 DNA     percentage.mtch.chl.vs.dada2                           2.26 
+    ##  8 cDNA    percentage.of.input.passed.filter                     77.2  
+    ##  9 cDNA    percentage.denoised                                   73.9  
+    ## 10 cDNA    percentage.of.input.merged                            64.6  
+    ## 11 cDNA    percentage.of.input.non.chimeric                      54.6  
+    ## 12 cDNA    percentage.removed.lineages                           54.5  
+    ## 13 cDNA    percentage.mtch.chl                                   54.0  
+    ## 14 cDNA    percentage.mtch.chl.vs.dada2                           0.886
+
 ## 1.3-Data wrangling
 
 Read tables parsed by the `parseAmplicon` function.
-```{r Import ASV tables computed in the previous step}
+
+``` r
 ASV <-  read.table("./16S_2022_Sequencing_data/ASV_table.txt", header = TRUE, sep = "\t", row.names = 1)
 tax.ASV <- read.table("./16S_2022_Sequencing_data/ASV_taxonomy_table.txt", header = TRUE, sep = "\t", row.names = 1)
 ```
 
 Rename ASVs and split DNA and cDNA datasets.
-```{r Rename ASVs in ASV table and taxonomy table}
+
+``` r
 all.equal(rownames(ASV), rownames(tax.ASV))
+```
+
+    ## [1] TRUE
+
+``` r
 asv.accnb <- rownames(ASV)
 rownames(ASV) <- paste(rep("ASV",length(asv.accnb)),c(1:length(asv.accnb)), sep  = "_")
 rownames(tax.ASV) <- rownames(ASV)
@@ -529,39 +676,93 @@ ASV.cDNA <- ASV %>%
 
 ### 1.3.1-Remove control sequences
 
-```{r Remove negative control sequences}
+``` r
 # There are two control columns: NTC.Index and NTC.TS (target specific)
 length(which(ASV.DNA$LP_ICE_21_NTC.TS_DNA != 0)) # ~27 ASV contaminated
+```
+
+    ## [1] 27
+
+``` r
 length(which(ASV.DNA$LP_ICE_21_NTC.Index_DNA != 0)) # ~0 ASV contaminated
+```
+
+    ## [1] 0
+
+``` r
 ASV.DNA.control <- ASV.DNA
 ASV.DNA <- ASV.DNA - ASV.DNA.control$LP_ICE_21_NTC.TS_DNA
 
 ASV.DNA[ASV.DNA < 0] <- 0
 sum(ASV.DNA)/sum(ASV.DNA.control)*100 # Percentage of DNA sequences retained after NTC DNA sequences removal (95,6%)
+```
 
+    ## [1] 95.64843
+
+``` r
 length(which(ASV.cDNA$LP_ICE_21_NTC.TS_cDNA != 0)) # 46 ASV contaminated
+```
+
+    ## [1] 46
+
+``` r
 length(which(ASV.cDNA$LP_ICE_21_NTC.Index_cDNA != 0)) # 0 ASV contaminated
+```
+
+    ## [1] 0
+
+``` r
 ASV.cDNA.control <- ASV.cDNA
 ASV.cDNA <- ASV.cDNA - ASV.cDNA.control$LP_ICE_21_NTC.TS_cDNA
 
 ASV.cDNA[ASV.cDNA < 0] <- 0
 sum(ASV.cDNA)/sum(ASV.cDNA.control)*100 # Percentage of sequences retained after NTC cDNA sequences removal (97,9%)
+```
 
+    ## [1] 97.89434
+
+``` r
 # Now remove NTC columns
 ASV.DNA <- ASV.DNA %>% select(-contains("NTC")) # Remove NTC columns
 ASV.cDNA <- ASV.cDNA %>% select(-contains("NTC"))
 dim(ASV.DNA)
-dim(ASV.cDNA)
+```
 
+    ## [1] 29761    41
+
+``` r
+dim(ASV.cDNA)
+```
+
+    ## [1] 29761    41
+
+``` r
 ASV.DNA.control %>% filter(rowSums(.) == 0) %>% dim() # 10288 empy ASVs
+```
+
+    ## [1] 10288    43
+
+``` r
 ASV.DNA %>% filter(rowSums(.) == 0) %>% dim() # 10311 empty ASVs (23 more)
+```
+
+    ## [1] 10311    41
+
+``` r
 ASV.cDNA.control %>% filter(rowSums(.) == 0) %>% dim() # 14983 empy ASVs
+```
+
+    ## [1] 14983    43
+
+``` r
 ASV.cDNA %>% filter(rowSums(.) == 0) %>% dim() # 15018 empty ASVs (37 more)
 ```
 
+    ## [1] 15018    41
+
 ### 1.3.2-Format column names
 
-```{r Format colnames ASV}
+``` r
 # Rename columns
 colnames(ASV.DNA) <- colnames(ASV.DNA) %>% 
   str_split(., "_DNA") %>%
@@ -576,59 +777,201 @@ colnames(ASV.cDNA) <- colnames(ASV.cDNA) %>%
 
 ### 1.3.4-Remove singletons
 
-Exact singletons are considered as ASV that have only one sequence in one sample. 
-```{r Remove singletons}
+Exact singletons are considered as ASV that have only one sequence in
+one sample.
+
+``` r
 singleASV.DNA <- ASV.DNA[rowSums(ASV.DNA)>0,] # Only keep non-empty ASVs
 singleASV.cDNA <- ASV.cDNA[rowSums(ASV.cDNA)>0,]
 
 singleASV.DNA[rowSums(singleASV.DNA)==1,] %>% dim() # 112 exact singletons
-singleASV.cDNA[rowSums(singleASV.cDNA)==1,] %>% dim() # 209 exact singletons
+```
 
+    ## [1] 112  41
+
+``` r
+singleASV.cDNA[rowSums(singleASV.cDNA)==1,] %>% dim() # 209 exact singletons
+```
+
+    ## [1] 209  41
+
+``` r
 ASV.DNA <- ASV.DNA[rowSums(ASV.DNA)>1,] # Remove singletons
 dim(ASV.DNA)
-hist(colSums(ASV.DNA)/colSums(singleASV.DNA)*100, xlab="% of sequences retained in sample", ylab= "Number of samples", main="Proportion of retained sequences after singleton removal")
-sum(ASV.DNA)/sum(singleASV.DNA) * 100 # 99,998% of sequences retained
+```
 
+    ## [1] 19338    41
+
+``` r
+hist(colSums(ASV.DNA)/colSums(singleASV.DNA)*100, xlab="% of sequences retained in sample", ylab= "Number of samples", main="Proportion of retained sequences after singleton removal")
+```
+
+![](BriefReport_Reproducible_code_files/figure-gfm/Remove%20singletons-1.png)<!-- -->
+
+``` r
+sum(ASV.DNA)/sum(singleASV.DNA) * 100 # 99,998% of sequences retained
+```
+
+    ## [1] 99.99767
+
+``` r
 ASV.cDNA <- ASV.cDNA[rowSums(ASV.cDNA)>1,] 
 dim(ASV.cDNA)
+```
+
+    ## [1] 14534    41
+
+``` r
 hist(colSums(ASV.cDNA)/colSums(singleASV.cDNA)*100, xlab="% of sequences retained in sample", ylab= "Number of samples", main="Proportion of retained sequences after singleton removal")
+```
+
+![](BriefReport_Reproducible_code_files/figure-gfm/Remove%20singletons-2.png)<!-- -->
+
+``` r
 sum(ASV.cDNA)/sum(singleASV.cDNA) * 100 # 99,994% of sequences retained
 ```
+
+    ## [1] 99.99351
 
 ## 1.4-Rarefaction
 
 ### 1.4.1-Library sizes
 
-```{r Library size}
+``` r
 ASV.DNA %>% colSums(.) %>% summary()
-ASV.cDNA %>% colSums(.) %>% summary()
+```
 
+    ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+    ##   39255   97092  119746  117171  135723  197705
+
+``` r
+ASV.cDNA %>% colSums(.) %>% summary()
+```
+
+    ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+    ##     533   35268   74050   78519  116486  178379
+
+``` r
 ASV.DNA %>% colSums(.) %>% sort()
+```
+
+    ##   LP_ICE_21_Core2_10-20   LP_ICE_21_Core3_30-40        LP_ICE_21_Water3 
+    ##                   39255                   43205                   74657 
+    ##    LP_ICE_21_Core2_0-10        LP_ICE_21_Water1   LP_ICE_21_Core2_20-30 
+    ##                   78360                   81415                   88881 
+    ##    LP_ICE_21_Core3_0-10   LP_ICE_21_Core2_60-70   LP_ICE_21_Core1_70-80 
+    ##                   91695                   94232                   94447 
+    ##   LP_ICE_21_Core3_70-80         LP_ICE_21_Snow3        LP_ICE_21_Water2 
+    ##                   96492                   97092                   98423 
+    ##   LP_ICE_21_Core3_50-60   LP_ICE_21_Core3_40-50         LP_ICE_21_Snow2 
+    ##                   99386                  104547                  106920 
+    ##   LP_ICE_21_Core1_40-50   LP_ICE_21_Core1_50-60   LP_ICE_21_Core2_50-60 
+    ##                  108180                  113593                  115025 
+    ##   LP_ICE_21_Core1_30-40         LP_ICE_21_Snow4         LP_ICE_21_Snow7 
+    ##                  116706                  117652                  119746 
+    ##  LP_ICE_21_Core3_90-100   LP_ICE_21_Core3_60-70   LP_ICE_21_Core1_60-70 
+    ##                  119856                  120464                  122261 
+    ##   LP_ICE_21_Core3_20-30         LP_ICE_21_Snow1   LP_ICE_21_Core1_20-30 
+    ##                  124065                  124601                  125265 
+    ##   LP_ICE_21_Core1_10-20   LP_ICE_21_Core2_40-50   LP_ICE_21_Core3_10-20 
+    ##                  125411                  133757                  134181 
+    ##   LP_ICE_21_Core2_30-40   LP_ICE_21_Core2_70-80         LP_ICE_21_Snow5 
+    ##                  135723                  137132                  137465 
+    ## LP_ICE_21_Core2_100-110   LP_ICE_21_Core3_80-90         LP_ICE_21_Snow6 
+    ##                  140230                  144414                  148899 
+    ##   LP_ICE_21_Core2_80-90   LP_ICE_21_Core1_80-90  LP_ICE_21_Core1_90-100 
+    ##                  153551                  157255                  170806 
+    ##  LP_ICE_21_Core2_90-100    LP_ICE_21_Core1_0-10 
+    ##                  171064                  197705
+
+``` r
 ASV.cDNA %>% colSums(.) %>% sort()
 ```
 
+    ##    LP_ICE_21_Core3_0-10         LP_ICE_21_Snow7   LP_ICE_21_Core3_40-50 
+    ##                     533                     841                    3779 
+    ##    LP_ICE_21_Core1_0-10    LP_ICE_21_Core2_0-10        LP_ICE_21_Water1 
+    ##                   15356                   24241                   24463 
+    ## LP_ICE_21_Core2_100-110        LP_ICE_21_Water2  LP_ICE_21_Core2_90-100 
+    ##                   27740                   31109                   31897 
+    ##   LP_ICE_21_Core3_80-90         LP_ICE_21_Snow2  LP_ICE_21_Core1_90-100 
+    ##                   34539                   35268                   37841 
+    ##        LP_ICE_21_Water3         LP_ICE_21_Snow3         LP_ICE_21_Snow4 
+    ##                   41098                   48416                   48529 
+    ##   LP_ICE_21_Core2_10-20   LP_ICE_21_Core3_30-40   LP_ICE_21_Core3_50-60 
+    ##                   66417                   68613                   68764 
+    ##  LP_ICE_21_Core3_90-100   LP_ICE_21_Core2_60-70   LP_ICE_21_Core3_60-70 
+    ##                   70089                   71770                   74050 
+    ##   LP_ICE_21_Core3_70-80   LP_ICE_21_Core1_60-70         LP_ICE_21_Snow1 
+    ##                   75373                   76881                   84978 
+    ##   LP_ICE_21_Core1_30-40         LP_ICE_21_Snow6   LP_ICE_21_Core1_80-90 
+    ##                   87209                   87359                   94883 
+    ##   LP_ICE_21_Core2_80-90   LP_ICE_21_Core2_40-50   LP_ICE_21_Core1_40-50 
+    ##                   96778                  103902                  105395 
+    ##   LP_ICE_21_Core1_70-80   LP_ICE_21_Core2_70-80   LP_ICE_21_Core3_20-30 
+    ##                  116486                  121663                  126939 
+    ##   LP_ICE_21_Core3_10-20         LP_ICE_21_Snow5   LP_ICE_21_Core1_10-20 
+    ##                  130451                  131460                  136450 
+    ##   LP_ICE_21_Core1_20-30   LP_ICE_21_Core2_20-30   LP_ICE_21_Core1_50-60 
+    ##                  146066                  152960                  165473 
+    ##   LP_ICE_21_Core2_30-40   LP_ICE_21_Core2_50-60 
+    ##                  174857                  178379
 
 ### 1.4.2-Rarefaction curves
 
-```{r Plot rarefaction curves for DNA and cDNA}
+``` r
 plotRarecurves(ASV.DNA,label = FALSE) +
   geom_vline(xintercept=39255, linetype="dotted", col = "#4DBBD5") # Min sequence number
+```
 
+    ## Warning in rarefy(df[, i], sample = x): most observed count data have counts 1,
+    ## but smallest count is 2
+
+![](BriefReport_Reproducible_code_files/figure-gfm/Plot%20rarefaction%20curves%20for%20DNA%20and%20cDNA-1.png)<!-- -->
+
+``` r
 plotRarecurves(ASV.cDNA, label = TRUE) +
   geom_vline(xintercept=24241, linetype="dotted", col = "red") # 
 ```
 
+    ## Warning in rarefy(df[, i], sample = x): most observed count data have counts 1,
+    ## but smallest count is 2
+
+    ## Warning in rarefy(df[, i], sample = x): most observed count data have counts 1,
+    ## but smallest count is 2
+
+    ## Warning in rarefy(df[, i], sample = x): most observed count data have counts 1,
+    ## but smallest count is 2
+
+    ## Warning in rarefy(df[, i], sample = x): most observed count data have counts 1,
+    ## but smallest count is 2
+
+    ## `geom_line()`: Each group consists of only one observation.
+    ## ℹ Do you need to adjust the group aesthetic?
+    ## `geom_line()`: Each group consists of only one observation.
+    ## ℹ Do you need to adjust the group aesthetic?
+
+![](BriefReport_Reproducible_code_files/figure-gfm/Plot%20rarefaction%20curves%20for%20DNA%20and%20cDNA-2.png)<!-- -->
+
 ### 1.4.3-Import in `phyloseq`
 
-We will work with `phyloseq` for downstream analyses, as well as for rarefaction.
-```{r Import in phyloseq}
+We will work with `phyloseq` for downstream analyses, as well as for
+rarefaction.
+
+``` r
 # Create a phyloseq object for each 'dataset'
 LP.ICE.DNA <- phyloseq(
   ASV.DNA %>% as.matrix() %>% otu_table(.,taxa_are_rows = TRUE),
   tax.ASV %>% rownames_to_column(var = "ASV") %>% filter(ASV %in% rownames(ASV.DNA)) %>% column_to_rownames(var = "ASV") %>% as.matrix() %>% tax_table(.)
 )
 LP.ICE.DNA
+```
 
+    ## phyloseq-class experiment-level object
+    ## otu_table()   OTU Table:         [ 19338 taxa and 41 samples ]
+    ## tax_table()   Taxonomy Table:    [ 19338 taxa by 6 taxonomic ranks ]
+
+``` r
 LP.ICE.cDNA <- phyloseq(
   ASV.cDNA %>% as.matrix() %>% otu_table(.,taxa_are_rows = TRUE),
   tax.ASV %>% rownames_to_column(var = "ASV") %>% filter(ASV %in% rownames(ASV.cDNA)) %>% column_to_rownames(var = "ASV") %>% as.matrix() %>% tax_table(.)
@@ -636,33 +979,149 @@ LP.ICE.cDNA <- phyloseq(
 LP.ICE.cDNA
 ```
 
+    ## phyloseq-class experiment-level object
+    ## otu_table()   OTU Table:         [ 14534 taxa and 41 samples ]
+    ## tax_table()   Taxonomy Table:    [ 14534 taxa by 6 taxonomic ranks ]
+
 ### 1.4.4-Rarefy to even depth
 
-```{r Rarefy to even depth}
+``` r
 # Sequencing depth
 ASV.DNA %>% colSums(.) %>% sort() # Minimum is 39255: rarefy to minimum sequencing depth
-ASV.cDNA %>% colSums(.) %>% sort() # Minimum is 533 # Rarefy to 24241
+```
 
+    ##   LP_ICE_21_Core2_10-20   LP_ICE_21_Core3_30-40        LP_ICE_21_Water3 
+    ##                   39255                   43205                   74657 
+    ##    LP_ICE_21_Core2_0-10        LP_ICE_21_Water1   LP_ICE_21_Core2_20-30 
+    ##                   78360                   81415                   88881 
+    ##    LP_ICE_21_Core3_0-10   LP_ICE_21_Core2_60-70   LP_ICE_21_Core1_70-80 
+    ##                   91695                   94232                   94447 
+    ##   LP_ICE_21_Core3_70-80         LP_ICE_21_Snow3        LP_ICE_21_Water2 
+    ##                   96492                   97092                   98423 
+    ##   LP_ICE_21_Core3_50-60   LP_ICE_21_Core3_40-50         LP_ICE_21_Snow2 
+    ##                   99386                  104547                  106920 
+    ##   LP_ICE_21_Core1_40-50   LP_ICE_21_Core1_50-60   LP_ICE_21_Core2_50-60 
+    ##                  108180                  113593                  115025 
+    ##   LP_ICE_21_Core1_30-40         LP_ICE_21_Snow4         LP_ICE_21_Snow7 
+    ##                  116706                  117652                  119746 
+    ##  LP_ICE_21_Core3_90-100   LP_ICE_21_Core3_60-70   LP_ICE_21_Core1_60-70 
+    ##                  119856                  120464                  122261 
+    ##   LP_ICE_21_Core3_20-30         LP_ICE_21_Snow1   LP_ICE_21_Core1_20-30 
+    ##                  124065                  124601                  125265 
+    ##   LP_ICE_21_Core1_10-20   LP_ICE_21_Core2_40-50   LP_ICE_21_Core3_10-20 
+    ##                  125411                  133757                  134181 
+    ##   LP_ICE_21_Core2_30-40   LP_ICE_21_Core2_70-80         LP_ICE_21_Snow5 
+    ##                  135723                  137132                  137465 
+    ## LP_ICE_21_Core2_100-110   LP_ICE_21_Core3_80-90         LP_ICE_21_Snow6 
+    ##                  140230                  144414                  148899 
+    ##   LP_ICE_21_Core2_80-90   LP_ICE_21_Core1_80-90  LP_ICE_21_Core1_90-100 
+    ##                  153551                  157255                  170806 
+    ##  LP_ICE_21_Core2_90-100    LP_ICE_21_Core1_0-10 
+    ##                  171064                  197705
+
+``` r
+ASV.cDNA %>% colSums(.) %>% sort() # Minimum is 533 # Rarefy to 24241
+```
+
+    ##    LP_ICE_21_Core3_0-10         LP_ICE_21_Snow7   LP_ICE_21_Core3_40-50 
+    ##                     533                     841                    3779 
+    ##    LP_ICE_21_Core1_0-10    LP_ICE_21_Core2_0-10        LP_ICE_21_Water1 
+    ##                   15356                   24241                   24463 
+    ## LP_ICE_21_Core2_100-110        LP_ICE_21_Water2  LP_ICE_21_Core2_90-100 
+    ##                   27740                   31109                   31897 
+    ##   LP_ICE_21_Core3_80-90         LP_ICE_21_Snow2  LP_ICE_21_Core1_90-100 
+    ##                   34539                   35268                   37841 
+    ##        LP_ICE_21_Water3         LP_ICE_21_Snow3         LP_ICE_21_Snow4 
+    ##                   41098                   48416                   48529 
+    ##   LP_ICE_21_Core2_10-20   LP_ICE_21_Core3_30-40   LP_ICE_21_Core3_50-60 
+    ##                   66417                   68613                   68764 
+    ##  LP_ICE_21_Core3_90-100   LP_ICE_21_Core2_60-70   LP_ICE_21_Core3_60-70 
+    ##                   70089                   71770                   74050 
+    ##   LP_ICE_21_Core3_70-80   LP_ICE_21_Core1_60-70         LP_ICE_21_Snow1 
+    ##                   75373                   76881                   84978 
+    ##   LP_ICE_21_Core1_30-40         LP_ICE_21_Snow6   LP_ICE_21_Core1_80-90 
+    ##                   87209                   87359                   94883 
+    ##   LP_ICE_21_Core2_80-90   LP_ICE_21_Core2_40-50   LP_ICE_21_Core1_40-50 
+    ##                   96778                  103902                  105395 
+    ##   LP_ICE_21_Core1_70-80   LP_ICE_21_Core2_70-80   LP_ICE_21_Core3_20-30 
+    ##                  116486                  121663                  126939 
+    ##   LP_ICE_21_Core3_10-20         LP_ICE_21_Snow5   LP_ICE_21_Core1_10-20 
+    ##                  130451                  131460                  136450 
+    ##   LP_ICE_21_Core1_20-30   LP_ICE_21_Core2_20-30   LP_ICE_21_Core1_50-60 
+    ##                  146066                  152960                  165473 
+    ##   LP_ICE_21_Core2_30-40   LP_ICE_21_Core2_50-60 
+    ##                  174857                  178379
+
+``` r
 # Representing rarefaction depth
 plotRarecurves(ASV.DNA,label = FALSE) +
   geom_vline(xintercept=39255, linetype="dotted", col = "#4DBBD5")
+```
 
+    ## Warning in rarefy(df[, i], sample = x): most observed count data have counts 1,
+    ## but smallest count is 2
+
+![](BriefReport_Reproducible_code_files/figure-gfm/Rarefy%20to%20even%20depth-1.png)<!-- -->
+
+``` r
 plotRarecurves(ASV.cDNA,label = FALSE) +
   geom_vline(xintercept=24241, linetype="dotted", col = "#4DBBD5")
+```
 
+    ## Warning in rarefy(df[, i], sample = x): most observed count data have counts 1,
+    ## but smallest count is 2
+
+    ## Warning in rarefy(df[, i], sample = x): most observed count data have counts 1,
+    ## but smallest count is 2
+
+    ## Warning in rarefy(df[, i], sample = x): most observed count data have counts 1,
+    ## but smallest count is 2
+
+    ## Warning in rarefy(df[, i], sample = x): most observed count data have counts 1,
+    ## but smallest count is 2
+
+    ## `geom_line()`: Each group consists of only one observation.
+    ## ℹ Do you need to adjust the group aesthetic?
+    ## `geom_line()`: Each group consists of only one observation.
+    ## ℹ Do you need to adjust the group aesthetic?
+
+![](BriefReport_Reproducible_code_files/figure-gfm/Rarefy%20to%20even%20depth-2.png)<!-- -->
+
+``` r
 # Rarefy to even depth independently
 LP.ICE.DNA.rar <- rarefy_even_depth(LP.ICE.DNA, sample.size = 39255, rngseed = 1998, replace = FALSE) # 701 ASVs removed
+```
+
+    ## `set.seed(1998)` was used to initialize repeatable random subsampling.
+    ## Please record this for your records so others can reproduce.
+    ## Try `set.seed(1998); .Random.seed` for the full vector
+    ## ...
+    ## 701OTUs were removed because they are no longer 
+    ## present in any sample after random subsampling
+    ## 
+    ## ...
+
+``` r
 LP.ICE.cDNA.rar <- rarefy_even_depth(LP.ICE.cDNA, sample.size = 24241, rngseed = 1998, replace = FALSE) # 2303 ASVs and 4 samples removed
 ```
 
-```{r Rarefy combined dataset for diversity analyses}
-
-```
-
+    ## `set.seed(1998)` was used to initialize repeatable random subsampling.
+    ## Please record this for your records so others can reproduce.
+    ## Try `set.seed(1998); .Random.seed` for the full vector
+    ## ...
+    ## 4 samples removedbecause they contained fewer reads than `sample.size`.
+    ## Up to first five removed samples are: 
+    ## 
+    ## LP_ICE_21_Core1_0-10LP_ICE_21_Core3_0-10LP_ICE_21_Core3_40-50LP_ICE_21_Snow7
+    ## ...
+    ## 2303OTUs were removed because they are no longer 
+    ## present in any sample after random subsampling
+    ## 
+    ## ...
 
 ## 1.5-Add sample metadata
 
-```{r Add sample metadata}
+``` r
 samples <- readRDS("./Metadata/sample_metadata.rds")
 
 # samples %>% filter(Project == "LP_ICE_2021") %>%  select(-c("Transect","Filter","Distance_source.m","pH","Sediment_surface_temperature.C","CH4_flux.nmol.m2.s_1","CO2_flux.nmol.m2.s_1","CH4_ox_rate.nmol.g_1.h_1","CH4.nmol.g_1","Methane_forcing","Season","Month","Project","ProjectCol","Group")) %>% saveRDS(., file = "~/Desktop/MethanICE_16S_2022/Temporary_BriefReport/R_Data/sample_metadata.rds")
@@ -671,12 +1130,11 @@ sample_data(LP.ICE.DNA.rar) <- samples %>% filter(Sample %in% sample_names(LP.IC
 sample_data(LP.ICE.cDNA.rar) <- samples %>% filter(Sample %in% sample_names(LP.ICE.cDNA.rar)) %>% column_to_rownames(var = "Sample")
 ```
 
-
 # 2-Beta diversity and 16S counts: **Figure 1A**
 
 ## 2.1-Test group differences (**Supplementary Information**)
 
-```{r Test group differences beta diversity}
+``` r
 # Extract ASV tables from phyloseq objects to apply betadisper
 asv <- LP.ICE.DNA.rar %>% otu_table() %>% as.data.frame()
 asv.cdna <- LP.ICE.cDNA.rar %>% otu_table() %>% as.data.frame()
@@ -684,57 +1142,244 @@ asv.cdna <- LP.ICE.cDNA.rar %>% otu_table() %>% as.data.frame()
 
 ### 2.1.1-DNA
 
-```{r Homogeneity of group dispersion}
+``` r
 # Test homogeneity of multivariate group dispersion
 bray.dna <- vegdist(asv %>% t(), method = "bray")
 betadisper(bray.dna, group = LP.ICE.DNA.rar %>%  sample_data() %>% as.data.frame() %>% pull(WinterGroup)) %>% TukeyHSD() 
+```
+
+    ##   Tukey multiple comparisons of means
+    ##     95% family-wise confidence level
+    ## 
+    ## Fit: aov(formula = distances ~ group, data = df)
+    ## 
+    ## $group
+    ##                             diff        lwr          upr     p adj
+    ## Ice_core-Snow        -0.21086084 -0.3181728 -0.103548897 0.0000335
+    ## Bottom_core-Snow     -0.26726531 -0.4148303 -0.119700306 0.0001193
+    ## Water-Snow           -0.35468052 -0.5285875 -0.180773497 0.0000180
+    ## Bottom_core-Ice_core -0.05640447 -0.1794699  0.066660920 0.6104211
+    ## Water-Ice_core       -0.14381968 -0.2974859  0.009846557 0.0736227
+    ## Water-Bottom_core    -0.08741521 -0.2714611  0.096630682 0.5826737
+
+``` r
 betadisper(bray.dna, group = LP.ICE.DNA.rar %>% sample_data() %>% as.data.frame() %>% pull(WinterGroup)) %>% plot()
 ```
 
-There are differences in the dispersion within the defined groups, hence it is not recommended to run any PERMANOVA analysis as it may confound location and dispersion effects. 
-`adonis()` implemented in Vegan is however less sensitive to dispersion effects than other methods (*e.g.* ANOSIM).
+![](BriefReport_Reproducible_code_files/figure-gfm/Homogeneity%20of%20group%20dispersion-1.png)<!-- -->
 
-```{r PERMANOVA DNA}
+There are differences in the dispersion within the defined groups, hence
+it is not recommended to run any PERMANOVA analysis as it may confound
+location and dispersion effects. `adonis()` implemented in Vegan is
+however less sensitive to dispersion effects than other methods (*e.g.*
+ANOSIM).
+
+``` r
 # PERMANOVA
 permanova.dna <- adonis(t(asv) ~ as.data.frame(sample_data(LP.ICE.DNA.rar))$WinterGroup)
-permanova.dna$aov.tab
+```
 
+    ## 'adonis' will be deprecated: use 'adonis2' instead
+
+``` r
+permanova.dna$aov.tab
+```
+
+    ## Permutation: free
+    ## Number of permutations: 999
+    ## 
+    ## Terms added sequentially (first to last)
+    ## 
+    ##                                                        Df SumsOfSqs MeanSqs
+    ## as.data.frame(sample_data(LP.ICE.DNA.rar))$WinterGroup  3    6.2864 2.09546
+    ## Residuals                                              37    3.4976 0.09453
+    ## Total                                                  40    9.7840        
+    ##                                                        F.Model      R2 Pr(>F)
+    ## as.data.frame(sample_data(LP.ICE.DNA.rar))$WinterGroup  22.167 0.64252  0.001
+    ## Residuals                                                      0.35748       
+    ## Total                                                          1.00000       
+    ##                                                           
+    ## as.data.frame(sample_data(LP.ICE.DNA.rar))$WinterGroup ***
+    ## Residuals                                                 
+    ## Total                                                     
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+``` r
 # Pairwise adonis
 pairwise.adonis(t(asv), factors = as.data.frame(sample_data(LP.ICE.DNA.rar))$WinterGroup, p.adjust.m = "BH")
 ```
 
+    ##                     pairs Df SumsOfSqs   F.Model        R2 p.value p.adjusted
+    ## 1 Ice_core vs Bottom_core  1 2.4139223 35.168876 0.5480675   0.001     0.0020
+    ## 2        Ice_core vs Snow  1 3.8564564 36.436630 0.5403092   0.001     0.0020
+    ## 3       Ice_core vs Water  1 0.2052648  3.020156 0.1006043   0.008     0.0096
+    ## 4     Bottom_core vs Snow  1 2.1562850 12.969686 0.5646436   0.001     0.0020
+    ## 5    Bottom_core vs Water  1 0.9540289 26.431202 0.8149930   0.016     0.0160
+    ## 6           Snow vs Water  1 1.6186072  8.591853 0.5178356   0.008     0.0096
+    ##   sig
+    ## 1   *
+    ## 2   *
+    ## 3   *
+    ## 4   *
+    ## 5   .
+    ## 6   *
+
 ### 2.1.2-cDNA
 
-```{r Homogeneity of group dispersion cDNA}
+``` r
 # Test homogeneity of multivariate group dispersion
 bray.cdna <- vegdist(asv.cdna %>% t(), method = "bray")
 betadisper(bray.cdna, group = LP.ICE.cDNA.rar %>% sample_data() %>% as.data.frame() %>% pull(WinterGroup)) %>% TukeyHSD() 
+```
+
+    ##   Tukey multiple comparisons of means
+    ##     95% family-wise confidence level
+    ## 
+    ## Fit: aov(formula = distances ~ group, data = df)
+    ## 
+    ## $group
+    ##                             diff        lwr         upr     p adj
+    ## Ice_core-Snow        -0.17349899 -0.3299657 -0.01703232 0.0250753
+    ## Bottom_core-Snow     -0.36076308 -0.5674429 -0.15408325 0.0002349
+    ## Water-Snow           -0.32242613 -0.5637762 -0.08107608 0.0052267
+    ## Bottom_core-Ice_core -0.18726409 -0.3556836 -0.01884455 0.0245816
+    ## Water-Ice_core       -0.14892714 -0.3584467  0.06059239 0.2383524
+    ## Water-Bottom_core     0.03833695 -0.2109283  0.28760221 0.9753464
+
+``` r
 betadisper(bray.cdna, group = LP.ICE.cDNA.rar %>% sample_data() %>% as.data.frame() %>% pull(WinterGroup)) %>% plot()
 ```
 
-```{r PERMANOVA cDNA}
+![](BriefReport_Reproducible_code_files/figure-gfm/Homogeneity%20of%20group%20dispersion%20cDNA-1.png)<!-- -->
+
+``` r
 # PERMANOVA
 permanova.cdna <- adonis(t(asv.cdna) ~ as.data.frame(sample_data(LP.ICE.cDNA.rar))$WinterGroup)
-permanova.cdna$aov.tab
+```
 
+    ## 'adonis' will be deprecated: use 'adonis2' instead
+
+``` r
+permanova.cdna$aov.tab
+```
+
+    ## Permutation: free
+    ## Number of permutations: 999
+    ## 
+    ## Terms added sequentially (first to last)
+    ## 
+    ##                                                         Df SumsOfSqs MeanSqs
+    ## as.data.frame(sample_data(LP.ICE.cDNA.rar))$WinterGroup  3    6.5860 2.19535
+    ## Residuals                                               33    3.3537 0.10163
+    ## Total                                                   36    9.9398        
+    ##                                                         F.Model      R2 Pr(>F)
+    ## as.data.frame(sample_data(LP.ICE.cDNA.rar))$WinterGroup  21.602 0.66259  0.001
+    ## Residuals                                                       0.33741       
+    ## Total                                                           1.00000       
+    ##                                                            
+    ## as.data.frame(sample_data(LP.ICE.cDNA.rar))$WinterGroup ***
+    ## Residuals                                                  
+    ## Total                                                      
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+``` r
 # Pairwise adonis
 pairwise.adonis(t(asv.cdna), factors = as.data.frame(sample_data(LP.ICE.cDNA.rar))$WinterGroup, p.adjust.m = "BH")
 ```
 
+    ##                     pairs Df SumsOfSqs   F.Model        R2 p.value p.adjusted
+    ## 1 Ice_core vs Bottom_core  1 3.1823441 38.943500 0.5996520   0.002     0.0030
+    ## 2        Ice_core vs Snow  1 3.2124486 26.529016 0.4956007   0.001     0.0030
+    ## 3       Ice_core vs Water  1 0.7556191  8.495846 0.2614441   0.001     0.0030
+    ## 4     Bottom_core vs Snow  1 2.1480350 15.856711 0.6379248   0.002     0.0030
+    ## 5    Bottom_core vs Water  1 0.5402228 38.466931 0.8650683   0.011     0.0132
+    ## 6           Snow vs Water  1 1.5356244  8.745702 0.5554342   0.015     0.0150
+    ##   sig
+    ## 1   *
+    ## 2   *
+    ## 3   *
+    ## 4   *
+    ## 5   .
+    ## 6   .
 
 ## 2.2-Ordination (**Figure 1A**)
 
 ### 2.2.1-Rarefaction of a combined DNA/cDNA dataset to compare beta diversity
 
-```{r DNA cDNA rarefaction}
+``` r
 # Add sample metadata to both unrarefied datasets
 sample_data(LP.ICE.DNA) <- samples %>% filter(Sample %in% sample_names(LP.ICE.DNA)) %>% column_to_rownames(var = "Sample") %>% mutate(Dataset = "DNA")
 sample_data(LP.ICE.cDNA) <- samples %>% filter(Sample %in% sample_names(LP.ICE.cDNA)) %>% column_to_rownames(var = "Sample") %>% mutate(Dataset = "cDNA")
 
 # Chose rarefaction depth (same as cDNA)
 LP.ICE.DNA %>% otu_table() %>% colSums() %>% sort()
-LP.ICE.cDNA %>% otu_table() %>% colSums() %>% sort() # Rarefy to 24241
+```
 
+    ##   LP_ICE_21_Core2_10-20   LP_ICE_21_Core3_30-40        LP_ICE_21_Water3 
+    ##                   39255                   43205                   74657 
+    ##    LP_ICE_21_Core2_0-10        LP_ICE_21_Water1   LP_ICE_21_Core2_20-30 
+    ##                   78360                   81415                   88881 
+    ##    LP_ICE_21_Core3_0-10   LP_ICE_21_Core2_60-70   LP_ICE_21_Core1_70-80 
+    ##                   91695                   94232                   94447 
+    ##   LP_ICE_21_Core3_70-80         LP_ICE_21_Snow3        LP_ICE_21_Water2 
+    ##                   96492                   97092                   98423 
+    ##   LP_ICE_21_Core3_50-60   LP_ICE_21_Core3_40-50         LP_ICE_21_Snow2 
+    ##                   99386                  104547                  106920 
+    ##   LP_ICE_21_Core1_40-50   LP_ICE_21_Core1_50-60   LP_ICE_21_Core2_50-60 
+    ##                  108180                  113593                  115025 
+    ##   LP_ICE_21_Core1_30-40         LP_ICE_21_Snow4         LP_ICE_21_Snow7 
+    ##                  116706                  117652                  119746 
+    ##  LP_ICE_21_Core3_90-100   LP_ICE_21_Core3_60-70   LP_ICE_21_Core1_60-70 
+    ##                  119856                  120464                  122261 
+    ##   LP_ICE_21_Core3_20-30         LP_ICE_21_Snow1   LP_ICE_21_Core1_20-30 
+    ##                  124065                  124601                  125265 
+    ##   LP_ICE_21_Core1_10-20   LP_ICE_21_Core2_40-50   LP_ICE_21_Core3_10-20 
+    ##                  125411                  133757                  134181 
+    ##   LP_ICE_21_Core2_30-40   LP_ICE_21_Core2_70-80         LP_ICE_21_Snow5 
+    ##                  135723                  137132                  137465 
+    ## LP_ICE_21_Core2_100-110   LP_ICE_21_Core3_80-90         LP_ICE_21_Snow6 
+    ##                  140230                  144414                  148899 
+    ##   LP_ICE_21_Core2_80-90   LP_ICE_21_Core1_80-90  LP_ICE_21_Core1_90-100 
+    ##                  153551                  157255                  170806 
+    ##  LP_ICE_21_Core2_90-100    LP_ICE_21_Core1_0-10 
+    ##                  171064                  197705
+
+``` r
+LP.ICE.cDNA %>% otu_table() %>% colSums() %>% sort() # Rarefy to 24241
+```
+
+    ##    LP_ICE_21_Core3_0-10         LP_ICE_21_Snow7   LP_ICE_21_Core3_40-50 
+    ##                     533                     841                    3779 
+    ##    LP_ICE_21_Core1_0-10    LP_ICE_21_Core2_0-10        LP_ICE_21_Water1 
+    ##                   15356                   24241                   24463 
+    ## LP_ICE_21_Core2_100-110        LP_ICE_21_Water2  LP_ICE_21_Core2_90-100 
+    ##                   27740                   31109                   31897 
+    ##   LP_ICE_21_Core3_80-90         LP_ICE_21_Snow2  LP_ICE_21_Core1_90-100 
+    ##                   34539                   35268                   37841 
+    ##        LP_ICE_21_Water3         LP_ICE_21_Snow3         LP_ICE_21_Snow4 
+    ##                   41098                   48416                   48529 
+    ##   LP_ICE_21_Core2_10-20   LP_ICE_21_Core3_30-40   LP_ICE_21_Core3_50-60 
+    ##                   66417                   68613                   68764 
+    ##  LP_ICE_21_Core3_90-100   LP_ICE_21_Core2_60-70   LP_ICE_21_Core3_60-70 
+    ##                   70089                   71770                   74050 
+    ##   LP_ICE_21_Core3_70-80   LP_ICE_21_Core1_60-70         LP_ICE_21_Snow1 
+    ##                   75373                   76881                   84978 
+    ##   LP_ICE_21_Core1_30-40         LP_ICE_21_Snow6   LP_ICE_21_Core1_80-90 
+    ##                   87209                   87359                   94883 
+    ##   LP_ICE_21_Core2_80-90   LP_ICE_21_Core2_40-50   LP_ICE_21_Core1_40-50 
+    ##                   96778                  103902                  105395 
+    ##   LP_ICE_21_Core1_70-80   LP_ICE_21_Core2_70-80   LP_ICE_21_Core3_20-30 
+    ##                  116486                  121663                  126939 
+    ##   LP_ICE_21_Core3_10-20         LP_ICE_21_Snow5   LP_ICE_21_Core1_10-20 
+    ##                  130451                  131460                  136450 
+    ##   LP_ICE_21_Core1_20-30   LP_ICE_21_Core2_20-30   LP_ICE_21_Core1_50-60 
+    ##                  146066                  152960                  165473 
+    ##   LP_ICE_21_Core2_30-40   LP_ICE_21_Core2_50-60 
+    ##                  174857                  178379
+
+``` r
 # Merge datasets
 sample_names(LP.ICE.cDNA) <- paste0(sample_names(LP.ICE.cDNA),"_cDNA")
 LP.ICE.DNA.cDNA <- merge_phyloseq(LP.ICE.DNA,LP.ICE.cDNA)
@@ -742,9 +1387,31 @@ LP.ICE.DNA.cDNA <- merge_phyloseq(LP.ICE.DNA,LP.ICE.cDNA)
 # Rarefy
 LP.ICE.DNA.cDNA.rar <- rarefy_even_depth(LP.ICE.DNA.cDNA, 24241, rngseed = 1998, replace = FALSE) # 3721 OTUs removed
 ```
+
+    ## `set.seed(1998)` was used to initialize repeatable random subsampling.
+
+    ## Please record this for your records so others can reproduce.
+
+    ## Try `set.seed(1998); .Random.seed` for the full vector
+
+    ## ...
+
+    ## 4 samples removedbecause they contained fewer reads than `sample.size`.
+
+    ## Up to first five removed samples are:
+
+    ## LP_ICE_21_Core1_0-10_cDNALP_ICE_21_Core3_0-10_cDNALP_ICE_21_Core3_40-50_cDNALP_ICE_21_Snow7_cDNA
+
+    ## ...
+
+    ## 3721OTUs were removed because they are no longer 
+    ## present in any sample after random subsampling
+
+    ## ...
+
 ### 2.2.2-16S DNA quantification with qPCR data
 
-```{r Read DNA quantification data}
+``` r
 # Adding qPCR information onto the ordination
 qPCR <- read.csv("./Metadata/LP_WINTER_2021_qPCR_16S_F1369-1492R_Triplicates.csv", header = TRUE, sep = ";", stringsAsFactors = FALSE)
 
@@ -757,7 +1424,11 @@ qPCR <- qPCR %>%
 qPCR.triplicates <- qPCR %>% 
   mutate(Sample = paste(Sample,"cDNA",sep="_")) %>% 
   full_join(qPCR)
+```
 
+    ## Joining with `by = join_by(Sample, CopyNb)`
+
+``` r
 qPCR.mean <- qPCR.triplicates %>% 
   group_by(Sample) %>% 
   summarize(Mean_CopyNb = mean(CopyNb))
@@ -766,18 +1437,82 @@ qPCR.mean <- qPCR.triplicates %>%
 sample_data(LP.ICE.DNA.cDNA.rar) <- sample_data(LP.ICE.DNA.cDNA.rar) %>% data.frame() %>% rownames_to_column(var = "Sample") %>% left_join(qPCR.mean) %>% column_to_rownames(var = "Sample")
 ```
 
+    ## Joining with `by = join_by(Sample)`
+
 ### 2.2.3-PCA Figure 1A
 
-```{r Hellinger transformation}
+``` r
 lp.ice.merged.hell <- decostand(LP.ICE.DNA.cDNA.rar %>% otu_table() %>% t(), method = "hellinger")
 ```
 
-```{r PCA, fig.dim = c(8,6)}
+``` r
 # Compute PCA
 pca.lp.ice.merged <- rda(lp.ice.merged.hell, scale = FALSE)
 summary(pca.lp.ice.merged)$cont
-screeplot(pca.lp.ice.merged, bstick = TRUE) # 3 axes are sufficient to represent most of the variance
+```
 
+    ## $importance
+    ## Importance of components:
+    ##                          PC1    PC2     PC3     PC4     PC5     PC6     PC7
+    ## Eigenvalue            0.1749 0.1096 0.05536 0.01952 0.01563 0.01222 0.01189
+    ## Proportion Explained  0.3058 0.1917 0.09680 0.03414 0.02733 0.02137 0.02080
+    ## Cumulative Proportion 0.3058 0.4975 0.59432 0.62846 0.65579 0.67717 0.69797
+    ##                            PC8      PC9     PC10     PC11     PC12     PC13
+    ## Eigenvalue            0.009423 0.008733 0.008492 0.007898 0.007294 0.006186
+    ## Proportion Explained  0.016477 0.015271 0.014849 0.013810 0.012754 0.010817
+    ## Cumulative Proportion 0.714443 0.729713 0.744563 0.758373 0.771126 0.781943
+    ##                           PC14     PC15     PC16     PC17     PC18     PC19
+    ## Eigenvalue            0.005637 0.005358 0.005300 0.005094 0.004639 0.004337
+    ## Proportion Explained  0.009857 0.009369 0.009267 0.008907 0.008112 0.007583
+    ## Cumulative Proportion 0.791800 0.801169 0.810436 0.819343 0.827456 0.835039
+    ##                           PC20     PC21     PC22     PC23     PC24     PC25
+    ## Eigenvalue            0.004129 0.003845 0.003803 0.003536 0.003452 0.003135
+    ## Proportion Explained  0.007221 0.006723 0.006651 0.006183 0.006035 0.005481
+    ## Cumulative Proportion 0.842260 0.848982 0.855633 0.861816 0.867851 0.873332
+    ##                           PC26     PC27     PC28     PC29     PC30     PC31
+    ## Eigenvalue            0.003082 0.002934 0.002804 0.002731 0.002509 0.002325
+    ## Proportion Explained  0.005389 0.005130 0.004903 0.004776 0.004387 0.004066
+    ## Cumulative Proportion 0.878721 0.883852 0.888755 0.893531 0.897918 0.901984
+    ##                           PC32     PC33     PC34     PC35     PC36     PC37
+    ## Eigenvalue            0.002231 0.002127 0.002083 0.001998 0.001907 0.001863
+    ## Proportion Explained  0.003902 0.003720 0.003643 0.003493 0.003335 0.003257
+    ## Cumulative Proportion 0.905886 0.909605 0.913248 0.916741 0.920076 0.923333
+    ##                           PC38     PC39     PC40     PC41     PC42     PC43
+    ## Eigenvalue            0.001812 0.001794 0.001693 0.001658 0.001618 0.001596
+    ## Proportion Explained  0.003169 0.003138 0.002960 0.002900 0.002830 0.002790
+    ## Cumulative Proportion 0.926502 0.929640 0.932600 0.935500 0.938329 0.941120
+    ##                           PC44     PC45     PC46     PC47     PC48     PC49
+    ## Eigenvalue            0.001581 0.001517 0.001498 0.001464 0.001416 0.001392
+    ## Proportion Explained  0.002765 0.002653 0.002619 0.002560 0.002476 0.002435
+    ## Cumulative Proportion 0.943885 0.946538 0.949157 0.951716 0.954193 0.956628
+    ##                           PC50     PC51     PC52     PC53     PC54     PC55
+    ## Eigenvalue            0.001364 0.001305 0.001269 0.001241 0.001211 0.001175
+    ## Proportion Explained  0.002384 0.002282 0.002220 0.002169 0.002117 0.002054
+    ## Cumulative Proportion 0.959012 0.961294 0.963514 0.965684 0.967801 0.969855
+    ##                           PC56     PC57     PC58     PC59     PC60      PC61
+    ## Eigenvalue            0.001138 0.001136 0.001104 0.001091 0.001021 0.0009566
+    ## Proportion Explained  0.001989 0.001987 0.001930 0.001907 0.001785 0.0016727
+    ## Cumulative Proportion 0.971844 0.973831 0.975761 0.977669 0.979454 0.9811268
+    ##                            PC62     PC63     PC64      PC65      PC66      PC67
+    ## Eigenvalue            0.0009371 0.000898 0.000862 0.0008271 0.0008203 0.0007967
+    ## Proportion Explained  0.0016386 0.001570 0.001507 0.0014462 0.0014344 0.0013930
+    ## Cumulative Proportion 0.9827654 0.984336 0.985843 0.9872890 0.9887234 0.9901164
+    ##                            PC68      PC69      PC70      PC71      PC72
+    ## Eigenvalue            0.0007701 0.0007575 0.0006757 0.0006562 0.0006215
+    ## Proportion Explained  0.0013465 0.0013245 0.0011815 0.0011475 0.0010867
+    ## Cumulative Proportion 0.9914629 0.9927874 0.9939689 0.9951163 0.9962030
+    ##                            PC73      PC74      PC75      PC76      PC77
+    ## Eigenvalue            0.0005679 0.0005095 0.0004242 0.0003696 0.0003003
+    ## Proportion Explained  0.0009930 0.0008909 0.0007417 0.0006462 0.0005251
+    ## Cumulative Proportion 0.9971961 0.9980870 0.9988287 0.9994749 1.0000000
+
+``` r
+screeplot(pca.lp.ice.merged, bstick = TRUE) # 3 axes are sufficient to represent most of the variance
+```
+
+![](BriefReport_Reproducible_code_files/figure-gfm/PCA-1.png)<!-- -->
+
+``` r
 # Represent axes 1 and 2 of PCA
 ggPCA(pca.lp.ice.merged,
       plot.spe = FALSE,
@@ -789,7 +1524,11 @@ ggPCA(pca.lp.ice.merged,
       alpha = 0.9) +
   scale_color_npg() +
   labs(col = "Habitat", shape = "Dataset")
+```
 
+![](BriefReport_Reproducible_code_files/figure-gfm/PCA-2.png)<!-- -->
+
+``` r
 # Represent axes 1 and 3 of PCA
 ggPCA(pca.lp.ice.merged,
       ax2 = 3,
@@ -803,10 +1542,13 @@ ggPCA(pca.lp.ice.merged,
   scale_color_npg() +
   labs(col = "Habitat", shape = "Dataset")
 ```
-PC1 represents 30.6% of total variance, PC2 represents 19.1% of total variation.
-The third discriminates DNA and cDNA datasets for the ice core group.
 
-```{r Figure 1A Ordination with qPCR}
+![](BriefReport_Reproducible_code_files/figure-gfm/PCA-3.png)<!-- -->
+PC1 represents 30.6% of total variance, PC2 represents 19.1% of total
+variation. The third discriminates DNA and cDNA datasets for the ice
+core group.
+
+``` r
 # Compute scaled scores of 'sites' (samples)
 pca.winter.scaled <- ggPCA(pca.lp.ice.merged, 
       plot.spe = FALSE, # To not compute species scores
@@ -848,10 +1590,11 @@ df.pca <- df.pca %>% bind_cols(sample_data(LP.ICE.DNA.cDNA.rar) %>% data.frame()
 )
 ```
 
+![](BriefReport_Reproducible_code_files/figure-gfm/Figure%201A%20Ordination%20with%20qPCR-1.png)<!-- -->
 
 ## 2.3-16S count statistics (**Supplementary Information**)
 
-```{r 16S count statistics}
+``` r
 # Recode the Depth profile
 qPCR <- qPCR %>% 
   mutate(Feature = str_split(Sample, "_", simplify = TRUE)[,4],
@@ -896,12 +1639,26 @@ qPCR %>%
             SD = sd(CopyNb))
 ```
 
+    ## `summarise()` has grouped output by 'WinterGroup'. You can override using the
+    ## `.groups` argument.
+
+    ## # A tibble: 7 × 4
+    ## # Groups:   WinterGroup [5]
+    ##   WinterGroup            Environment   Mean     SD
+    ##   <chr>                  <fct>        <dbl>  <dbl>
+    ## 1 LP_ICE_21_Core1_80-90  Ice core    20286.  5324.
+    ## 2 LP_ICE_21_Core2_80-90  Ice core     6091.   207.
+    ## 3 LP_ICE_21_Core2_90-100 Ice core    51278. 13549.
+    ## 4 LP_ICE_21_Core3_80-90  Ice core    23754.   397.
+    ## 5 <NA>                   Ice core    30316. 85430.
+    ## 6 <NA>                   Snow        12312.  8005.
+    ## 7 <NA>                   Water       93169. 29001.
 
 # 3-Alpha diversity: **Figure 1B**
 
 ## 3.1-Compute alpha diversity for both datasets
 
-```{r Compute alpha diversity}
+``` r
 alpha.lp.ice.dna <- estimate_richness(LP.ICE.DNA.rar) # Get the data to make a ggplot
 alpha.lp.ice.cdna <- estimate_richness(LP.ICE.cDNA.rar) # cDNA
 
@@ -930,7 +1687,12 @@ shannon.ice <- alpha.cdna %>%
   mutate(Dataset = "cDNA") %>% 
   full_join(alpha.dna %>% mutate(Dataset = "DNA")) %>% 
   filter(AlphaMeasure == "Shannon")
+```
 
+    ## Joining with `by = join_by(Feature, Environment, Depth, WinterGroup,
+    ## WinterGroupCol, EnvSeason, AlphaMeasure, AlphaValue, Dataset)`
+
+``` r
 (plot.shannon.ice <- ggplot(shannon.ice,
        aes(x = WinterGroup, y = AlphaValue, fill = WinterGroup)) +
   geom_boxplot(alpha = 0.7, size = 0.2) +
@@ -948,37 +1710,166 @@ shannon.ice <- alpha.cdna %>%
         axis.ticks.y = element_blank()))
 ```
 
+![](BriefReport_Reproducible_code_files/figure-gfm/Compute%20alpha%20diversity-1.png)<!-- -->
+
 ## 3.2-Test for group differences in alpha diversity
 
-```{r Statistical tests alpha diversity}
+``` r
 # cDNA and DNA combined for Shannon index
 shannon.ice %>%
   group_by(WinterGroup, Dataset) %>%
   group_modify(~ modified_shapiro_test(.x$AlphaValue)) %>%
   filter(p.value <= 0.05) # Non gaussian data for ice core and water
+```
 
+    ## # A tibble: 3 × 4
+    ## # Groups:   WinterGroup, Dataset [3]
+    ##   WinterGroup Dataset     p.value statistic
+    ##   <fct>       <chr>         <dbl>     <dbl>
+    ## 1 Ice_core    cDNA    0.000000183     0.534
+    ## 2 Water       DNA     0.0466          0.771
+    ## 3 Water       cDNA    0.0220          0.760
+
+``` r
 shannon.ice %>%
   group_by(Dataset) %>%
   group_modify(~ modified_KW_test(.x$AlphaValue,.x$WinterGroup)) # Test is significant for both datasets for Shannon index
+```
 
+    ## # A tibble: 2 × 4
+    ## # Groups:   Dataset [2]
+    ##   Dataset  p.value statistic parameter
+    ##   <chr>      <dbl>     <dbl>     <int>
+    ## 1 DNA     0.000367      18.4         3
+    ## 2 cDNA    0.000340      18.5         3
+
+``` r
 (shannon.ice.dunn <- shannon.ice %>%
   group_by(Dataset) %>%
   group_modify(~ modified_dunn_test(.x$AlphaValue,.x$WinterGroup, method="bh")))
+```
 
+    ##   Kruskal-Wallis rank sum test
+    ## 
+    ## data: x and g
+    ## Kruskal-Wallis chi-squared = 18.3837, df = 3, p-value = 0
+    ## 
+    ## 
+    ##                              Comparison of x by g                              
+    ##                              (Benjamini-Hochberg)                              
+    ## Col Mean-|
+    ## Row Mean |   Bottom_c   Ice_core       Snow
+    ## ---------+---------------------------------
+    ## Ice_core |  -3.405816
+    ##          |    0.0010*
+    ##          |
+    ##     Snow |  -3.951128  -1.527416
+    ##          |    0.0002*     0.0760
+    ##          |
+    ##    Water |  -0.990664   1.541069   2.304222
+    ##          |     0.1609     0.0925    0.0212*
+    ## 
+    ## alpha = 0.05
+    ## Reject Ho if p <= alpha/2
+    ##   Kruskal-Wallis rank sum test
+    ## 
+    ## data: x and g
+    ## Kruskal-Wallis chi-squared = 18.5434, df = 3, p-value = 0
+    ## 
+    ## 
+    ##                              Comparison of x by g                              
+    ##                              (Benjamini-Hochberg)                              
+    ## Col Mean-|
+    ## Row Mean |   Bottom_c   Ice_core       Snow
+    ## ---------+---------------------------------
+    ## Ice_core |  -3.557307
+    ##          |    0.0006*
+    ##          |
+    ##     Snow |  -3.559910  -0.873294
+    ##          |    0.0011*     0.2295
+    ##          |
+    ##    Water |  -0.632511   2.106996   2.395269
+    ##          |     0.2635     0.0263    0.0166*
+    ## 
+    ## alpha = 0.05
+    ## Reject Ho if p <= alpha/2
+
+    ## # A tibble: 12 × 3
+    ## # Groups:   Dataset [2]
+    ##    Dataset adjusted.p.value comparison            
+    ##    <chr>              <dbl> <chr>                 
+    ##  1 DNA             0.000989 Bottom_core - Ice_core
+    ##  2 DNA             0.000233 Bottom_core - Snow    
+    ##  3 DNA             0.0760   Ice_core - Snow       
+    ##  4 DNA             0.161    Bottom_core - Water   
+    ##  5 DNA             0.0925   Ice_core - Water      
+    ##  6 DNA             0.0212   Snow - Water          
+    ##  7 cDNA            0.000562 Bottom_core - Ice_core
+    ##  8 cDNA            0.00111  Bottom_core - Snow    
+    ##  9 cDNA            0.230    Ice_core - Snow       
+    ## 10 cDNA            0.264    Bottom_core - Water   
+    ## 11 cDNA            0.0263   Ice_core - Water      
+    ## 12 cDNA            0.0166   Snow - Water
+
+``` r
 # Check with MW test for bottom ice vs water samples
 shannon.ice.MW <- shannon.ice %>%
   filter(EnvSeason %in% c("Winter_Water","Winter_Bottom_core"))
 wilcox.test(shannon.ice.MW %>% filter(Dataset == "DNA") %>% pull(AlphaValue) ~ shannon.ice.MW %>% filter(Dataset == "DNA") %>% pull(WinterGroup))
-wilcox.test(shannon.ice.MW %>% filter(Dataset == "cDNA") %>% pull(AlphaValue) ~ shannon.ice.MW %>% filter(Dataset == "cDNA") %>% pull(WinterGroup))
+```
 
+    ## 
+    ##  Wilcoxon rank sum exact test
+    ## 
+    ## data:  shannon.ice.MW %>% filter(Dataset == "DNA") %>% pull(AlphaValue) by shannon.ice.MW %>% filter(Dataset == "DNA") %>% pull(WinterGroup)
+    ## W = 0, p-value = 0.03571
+    ## alternative hypothesis: true location shift is not equal to 0
+
+``` r
+wilcox.test(shannon.ice.MW %>% filter(Dataset == "cDNA") %>% pull(AlphaValue) ~ shannon.ice.MW %>% filter(Dataset == "cDNA") %>% pull(WinterGroup))
+```
+
+    ## 
+    ##  Wilcoxon rank sum exact test
+    ## 
+    ## data:  shannon.ice.MW %>% filter(Dataset == "cDNA") %>% pull(AlphaValue) by shannon.ice.MW %>% filter(Dataset == "cDNA") %>% pull(WinterGroup)
+    ## W = 0, p-value = 0.03571
+    ## alternative hypothesis: true location shift is not equal to 0
+
+``` r
 # Other option for KW post-hoc test with {{pgirmness}}
 kruskalmc(shannon.ice %>% filter(Dataset == "DNA") %>% pull(AlphaValue) ~ shannon.ice %>% filter(Dataset == "DNA") %>% pull(WinterGroup))
+```
+
+    ## Multiple comparison test after Kruskal-Wallis 
+    ## alpha: 0.05 
+    ## Comparisons
+    ##                        obs.dif critical.dif stat.signif
+    ## Snow-Ice_core         7.791209     13.45750       FALSE
+    ## Snow-Bottom_core     27.714286     18.50545        TRUE
+    ## Snow-Water           19.047619     21.80888       FALSE
+    ## Ice_core-Bottom_core 19.923077     15.43307        TRUE
+    ## Ice_core-Water       11.256410     19.27058       FALSE
+    ## Bottom_core-Water     8.666667     23.08035       FALSE
+
+``` r
 kruskalmc(shannon.ice %>% filter(Dataset == "cDNA") %>% pull(AlphaValue) ~ shannon.ice %>% filter(Dataset == "cDNA") %>% pull(WinterGroup))
 ```
 
+    ## Multiple comparison test after Kruskal-Wallis 
+    ## alpha: 0.05 
+    ## Comparisons
+    ##                        obs.dif critical.dif stat.signif
+    ## Snow-Ice_core         4.333333     13.09118       FALSE
+    ## Snow-Bottom_core     23.333333     17.29239        TRUE
+    ## Snow-Water           18.333333     20.19316       FALSE
+    ## Ice_core-Bottom_core 19.000000     14.09124        TRUE
+    ## Ice_core-Water       14.000000     17.52998       FALSE
+    ## Bottom_core-Water     5.000000     20.85540       FALSE
+
 ## 3.3-Plot alpha diversity (**Figure 1B**)
 
-```{r Plot alpha diversity with statistical outputs}
+``` r
 # To plot groups of significance using letters we use the multcompView package
 x = shannon.ice.dunn %>% filter(Dataset == "cDNA") %>% pull(adjusted.p.value)
 names(x) = shannon.ice.dunn %>% filter(Dataset == "cDNA") %>% pull(comparison) %>% str_replace(., " - ", "-")
@@ -996,7 +1887,11 @@ Shannon_Letters_cDNA <- shannon.ice %>%
   group_by(WinterGroup) %>%
   summarize(Placement = max(AlphaValue)) %>% 
   full_join(Shannon_Letters_cDNA)
+```
 
+    ## Joining with `by = join_by(WinterGroup)`
+
+``` r
 x = shannon.ice.dunn %>% filter(Dataset == "DNA") %>% pull(adjusted.p.value)
 names(x) = shannon.ice.dunn %>% filter(Dataset == "DNA") %>% pull(comparison) %>% str_replace(., " - ", "-")
 
@@ -1013,7 +1908,11 @@ Shannon_Letters_DNA <- shannon.ice %>%
   group_by(WinterGroup) %>%
   summarize(Placement = max(AlphaValue)) %>% 
   full_join(Shannon_Letters_DNA)
+```
 
+    ## Joining with `by = join_by(WinterGroup)`
+
+``` r
 dummy <- data.frame(WinterGroup = factor(rep(c("Snow","Ice_core","Bottom_core","Water"),2)), Dataset = factor(c(rep("cDNA",4),rep("DNA",4)))) %>% 
   mutate(AlphaValue = rep(7,8)) # To make room for letters on the plot
 
@@ -1028,16 +1927,20 @@ dummy <- data.frame(WinterGroup = factor(rep(c("Snow","Ice_core","Bottom_core","
   theme(axis.text.y= element_text(size = 9)))
 ```
 
+    ## Joining with `by = join_by(WinterGroup, Placement, Letters, Dataset)`
+
+![](BriefReport_Reproducible_code_files/figure-gfm/Plot%20alpha%20diversity%20with%20statistical%20outputs-1.png)<!-- -->
+
 # 4-Taxonomic composition: **Figure 1C**
 
 ## 4.1-Transform sample counts
 
-```{r Transform sample count}
+``` r
 LP.ICE.DNA.rar <- transform_sample_counts(LP.ICE.DNA.rar, function(x){x/sum(x)*100})
 LP.ICE.cDNA.rar <- transform_sample_counts(LP.ICE.cDNA.rar, function(x){x/sum(x)*100})
 ```
 
-```{r Handle sample name levels}
+``` r
 samples <- samples %>% 
   mutate(SampleName = Sample) # To keep as a factor column within phyloseq
 
@@ -1048,7 +1951,7 @@ sample_data(LP.ICE.cDNA.rar) <- samples %>% filter(Sample %in% sample_names(LP.I
 
 ## 4.2-Taxonomy color dataframe
 
-```{r Taxonomy color dataframe}
+``` r
 taxonomy.genusCol <- c(tax_table(LP.ICE.DNA.rar) %>% data.frame() %>% pull(Genus),
                        tax_table(LP.ICE.cDNA.rar) %>% data.frame() %>% pull(Genus)) %>% 
   unique() %>% 
@@ -1100,7 +2003,7 @@ taxonomy.genusCol[c("ANME-1a_ge","Antarcticibacterium","Bacteroidetes_VC2.1_Bac2
 
 ## 4.3-Taxonomy barplot (**Figure 1C**)
 
-```{r Plot taxonomy DNA, fig.dim = c(9,6)}
+``` r
 # Recode depth to plot as function of depth, 0 being closest to the water
 sample_data(LP.ICE.DNA.rar) <- sample_data(LP.ICE.DNA.rar) %>% 
   data.frame() %>%
@@ -1174,7 +2077,9 @@ dummy_dna <- data.frame(SampleName = c("LP_ICE_21_Core1_100-110blank","LP_ICE_21
 )
 ```
 
-```{r Plot taxonomy cDNA, fig.dim = c(9,6)}
+![](BriefReport_Reproducible_code_files/figure-gfm/Plot%20taxonomy%20DNA-1.png)<!-- -->
+
+``` r
 # cDNA
 sample_data(LP.ICE.cDNA.rar) <- sample_data(LP.ICE.cDNA.rar) %>% 
   data.frame() %>% 
@@ -1243,13 +2148,106 @@ dummy_cdna <- data.frame(SampleName = c("LP_ICE_21_Snow7","LP_ICE_21_Core1_100-1
 )
 ```
 
+![](BriefReport_Reproducible_code_files/figure-gfm/Plot%20taxonomy%20cDNA-1.png)<!-- -->
+
 ## 4.4-Chloroplast reads (**Figure 1C**)
 
-```{r Add choloroplast read on paper plot, fig.dim = c(7,1)}
+``` r
 chloro <- read.table("./16S_2022_Sequencing_data/Chloroplasts.txt", header = TRUE, sep = "\t")
 
 colSums(chloro %>% select(-c("OTU.ID","taxonomy"))) %>% sort()
+```
 
+    ##    LP_ICE_21_Core1_60.70_DNA    LP_ICE_21_Core1_80.90_DNA 
+    ##                            0                            0 
+    ##  LP_ICE_21_Core1_90.100_cDNA   LP_ICE_21_Core1_90.100_DNA 
+    ##                            0                            0 
+    ## LP_ICE_21_Core2_100.110_cDNA  LP_ICE_21_Core2_100.110_DNA 
+    ##                            0                            0 
+    ##    LP_ICE_21_Core2_30.40_DNA    LP_ICE_21_Core2_50.60_DNA 
+    ##                            0                            0 
+    ##    LP_ICE_21_Core2_70.80_DNA    LP_ICE_21_Core2_80.90_DNA 
+    ##                            0                            0 
+    ##  LP_ICE_21_Core2_90.100_cDNA   LP_ICE_21_Core2_90.100_DNA 
+    ##                            0                            0 
+    ##    LP_ICE_21_Core3_0.10_cDNA    LP_ICE_21_Core3_40.50_DNA 
+    ##                            0                            0 
+    ##    LP_ICE_21_Core3_60.70_DNA   LP_ICE_21_Core3_80.90_cDNA 
+    ##                            0                            0 
+    ##    LP_ICE_21_Core3_80.90_DNA  LP_ICE_21_Core3_90.100_cDNA 
+    ##                            0                            0 
+    ##   LP_ICE_21_Core3_90.100_DNA        LP_ICE_21_MoComE_cDNA 
+    ##                            0                            0 
+    ##         LP_ICE_21_MoComE_DNA     LP_ICE_21_NTC.Index_cDNA 
+    ##                            0                            0 
+    ##      LP_ICE_21_NTC.Index_DNA         LP_ICE_21_NTC.TS_DNA 
+    ##                            0                            0 
+    ##        LP_ICE_21_Water1_cDNA         LP_ICE_21_Water1_DNA 
+    ##                            0                            0 
+    ##        LP_ICE_21_Water3_cDNA         LP_ICE_21_Water3_DNA 
+    ##                            0                            0 
+    ##    LP_ICE_21_Core1_40.50_DNA    LP_ICE_21_Core1_50.60_DNA 
+    ##                            2                            2 
+    ##        LP_ICE_21_Water2_cDNA         LP_ICE_21_Water2_DNA 
+    ##                            2                            3 
+    ##    LP_ICE_21_Core2_60.70_DNA    LP_ICE_21_Core1_30.40_DNA 
+    ##                            6                            8 
+    ##   LP_ICE_21_Core1_80.90_cDNA   LP_ICE_21_Core1_60.70_cDNA 
+    ##                           10                           17 
+    ##    LP_ICE_21_Core1_70.80_DNA   LP_ICE_21_Core2_60.70_cDNA 
+    ##                           19                           21 
+    ##    LP_ICE_21_Core3_50.60_DNA   LP_ICE_21_Core2_40.50_cDNA 
+    ##                           21                           26 
+    ##   LP_ICE_21_Core2_80.90_cDNA    LP_ICE_21_Core3_30.40_DNA 
+    ##                           30                           33 
+    ##   LP_ICE_21_Core3_40.50_cDNA   LP_ICE_21_Core2_50.60_cDNA 
+    ##                           35                           41 
+    ##   LP_ICE_21_Core3_60.70_cDNA   LP_ICE_21_Core3_50.60_cDNA 
+    ##                           54                           64 
+    ##    LP_ICE_21_Core3_20.30_DNA    LP_ICE_21_Core2_40.50_DNA 
+    ##                           67                           79 
+    ##    LP_ICE_21_Core1_20.30_DNA    LP_ICE_21_Core2_10.20_DNA 
+    ##                           81                           82 
+    ##   LP_ICE_21_Core2_70.80_cDNA    LP_ICE_21_Core2_20.30_DNA 
+    ##                           83                          101 
+    ##     LP_ICE_21_Core3_0.10_DNA   LP_ICE_21_Core1_20.30_cDNA 
+    ##                          110                          151 
+    ##   LP_ICE_21_Core1_30.40_cDNA    LP_ICE_21_Core3_10.20_DNA 
+    ##                          169                          170 
+    ##   LP_ICE_21_Core1_70.80_cDNA   LP_ICE_21_Core3_30.40_cDNA 
+    ##                          193                          205 
+    ##   LP_ICE_21_Core3_20.30_cDNA    LP_ICE_21_Core1_0.10_cDNA 
+    ##                          220                          235 
+    ##         LP_ICE_21_Snow2_cDNA   LP_ICE_21_Core3_70.80_cDNA 
+    ##                          248                          252 
+    ##         LP_ICE_21_Snow3_cDNA   LP_ICE_21_Core3_10.20_cDNA 
+    ##                          271                          280 
+    ##    LP_ICE_21_Core3_70.80_DNA     LP_ICE_21_Core2_0.10_DNA 
+    ##                          283                          357 
+    ##         LP_ICE_21_Snow1_cDNA         LP_ICE_21_Snow4_cDNA 
+    ##                          360                          384 
+    ##   LP_ICE_21_Core2_20.30_cDNA         LP_ICE_21_Snow7_cDNA 
+    ##                          450                          477 
+    ##   LP_ICE_21_Core2_30.40_cDNA   LP_ICE_21_Core1_10.20_cDNA 
+    ##                          506                          519 
+    ##    LP_ICE_21_Core1_10.20_DNA    LP_ICE_21_Core2_0.10_cDNA 
+    ##                          520                          625 
+    ##   LP_ICE_21_Core2_10.20_cDNA   LP_ICE_21_Core1_40.50_cDNA 
+    ##                          776                         1139 
+    ##          LP_ICE_21_Snow3_DNA          LP_ICE_21_Snow7_DNA 
+    ##                         2563                         2568 
+    ##   LP_ICE_21_Core1_50.60_cDNA         LP_ICE_21_Snow6_cDNA 
+    ##                         3110                         3292 
+    ##         LP_ICE_21_Snow5_cDNA          LP_ICE_21_Snow1_DNA 
+    ##                         3459                         3701 
+    ##          LP_ICE_21_Snow4_DNA        LP_ICE_21_NTC.TS_cDNA 
+    ##                         4486                         4675 
+    ##          LP_ICE_21_Snow5_DNA          LP_ICE_21_Snow6_DNA 
+    ##                         5733                         5906 
+    ##     LP_ICE_21_Core1_0.10_DNA          LP_ICE_21_Snow2_DNA 
+    ##                         8115                        14787
+
+``` r
 # cDNA
 chloro %>% 
   select(matches("cDNA|OTU.ID")) %>% 
@@ -1310,7 +2308,16 @@ chloro %>%
         strip.background = element_blank(),
         panel.spacing = unit(.03, "lines"))
 }
+```
 
+    ## Warning in geom_blank(data = dummy_cdna, aes(x = SampleName2, y = 1), color =
+    ## "black"): Ignoring unknown parameters: `colour`
+
+    ## Warning: Removed 30 rows containing missing values (`geom_text()`).
+
+![](BriefReport_Reproducible_code_files/figure-gfm/Add%20choloroplast%20read%20on%20paper%20plot-1.png)<!-- -->
+
+``` r
 # DNA
 chloro %>% 
   select(!matches("cDNA|taxonomy")) %>% 
@@ -1371,16 +2378,33 @@ chloro %>%
 }
 ```
 
+    ## Warning in geom_blank(data = dummy_cdna, aes(x = SampleName2, y = 1), color =
+    ## "black"): Ignoring unknown parameters: `colour`
+
+    ## Warning: Removed 26 rows containing missing values (`geom_text()`).
+
+![](BriefReport_Reproducible_code_files/figure-gfm/Add%20choloroplast%20read%20on%20paper%20plot-2.png)<!-- -->
 
 ## 4.5-Abundance of *Sulfurimonas* and *Thiomicrorhabdus* dominant ASVs
 
-Depends on the definition of the bottom core. We now define the bottom core as the ice core samples where the genus *Sulfurimonas* becomes dominant.
+Depends on the definition of the bottom core. We now define the bottom
+core as the ice core samples where the genus *Sulfurimonas* becomes
+dominant.
 
-```{r SOB abundances}
+``` r
 # Plotting taxonomy at the ASV level, we see the two dominant SOB genera are represented by three ASVs
 plotAbundance(LP.ICE.DNA.rar, x = SampleName, n=20, nrank="otu", rank = OTU, other = FALSE)
-plotAbundance(LP.ICE.cDNA.rar, x = SampleName, n=20, nrank="otu", rank = OTU, other = FALSE)
+```
 
+![](BriefReport_Reproducible_code_files/figure-gfm/SOB%20abundances-1.png)<!-- -->
+
+``` r
+plotAbundance(LP.ICE.cDNA.rar, x = SampleName, n=20, nrank="otu", rank = OTU, other = FALSE)
+```
+
+![](BriefReport_Reproducible_code_files/figure-gfm/SOB%20abundances-2.png)<!-- -->
+
+``` r
 # Compute their abundance per sample
 LP.ICE.DNA.rar %>% 
   otu_table() %>% 
@@ -1392,7 +2416,28 @@ LP.ICE.DNA.rar %>%
   group_by(Sample, WinterGroup) %>% 
   summarize(Tot_abundance = sum(Abundance)) %>% 
   arrange(WinterGroup)
+```
 
+    ## `summarise()` has grouped output by 'Sample'. You can override using the
+    ## `.groups` argument.
+
+    ## # A tibble: 41 × 3
+    ## # Groups:   Sample [41]
+    ##    Sample                WinterGroup Tot_abundance
+    ##    <chr>                 <fct>               <dbl>
+    ##  1 LP_ICE_21_Snow1       Snow               0.0484
+    ##  2 LP_ICE_21_Snow2       Snow               0.0994
+    ##  3 LP_ICE_21_Snow3       Snow               0.0153
+    ##  4 LP_ICE_21_Snow4       Snow               0     
+    ##  5 LP_ICE_21_Snow5       Snow               0.0586
+    ##  6 LP_ICE_21_Snow6       Snow               0.150 
+    ##  7 LP_ICE_21_Snow7       Snow               0     
+    ##  8 LP_ICE_21_Core1_0-10  Ice_core           0.171 
+    ##  9 LP_ICE_21_Core1_10-20 Ice_core           0.0178
+    ## 10 LP_ICE_21_Core1_20-30 Ice_core           0.273 
+    ## # ℹ 31 more rows
+
+``` r
 LP.ICE.cDNA.rar %>% 
   otu_table() %>% 
   as.data.frame() %>% 
@@ -1405,11 +2450,30 @@ LP.ICE.cDNA.rar %>%
   arrange(WinterGroup)
 ```
 
+    ## `summarise()` has grouped output by 'Sample'. You can override using the
+    ## `.groups` argument.
+
+    ## # A tibble: 37 × 3
+    ## # Groups:   Sample [37]
+    ##    Sample                WinterGroup Tot_abundance
+    ##    <chr>                 <fct>               <dbl>
+    ##  1 LP_ICE_21_Snow1       Snow               0.0330
+    ##  2 LP_ICE_21_Snow2       Snow               0.0743
+    ##  3 LP_ICE_21_Snow3       Snow               0.0371
+    ##  4 LP_ICE_21_Snow4       Snow               0.0413
+    ##  5 LP_ICE_21_Snow5       Snow               0.342 
+    ##  6 LP_ICE_21_Snow6       Snow               0.916 
+    ##  7 LP_ICE_21_Core1_10-20 Ice_core           0.747 
+    ##  8 LP_ICE_21_Core1_20-30 Ice_core           5.51  
+    ##  9 LP_ICE_21_Core1_30-40 Ice_core           1.18  
+    ## 10 LP_ICE_21_Core1_40-50 Ice_core           0.701 
+    ## # ℹ 27 more rows
+
 ## 4.5-ANME-SRB correlations: **Supplementary Information**
 
 ### 4.5.1. Plot ANME and SEEP-SRB1 abundances
 
-```{r Plot abundance of ANMEs and SEEP-SRB1}
+``` r
 # DNA
 searchTaxa(LP.ICE.DNA.rar, "ANME|Methanoperedens", "Genus") %>% 
   rownames() %>% 
@@ -1421,7 +2485,11 @@ searchTaxa(LP.ICE.DNA.rar, "ANME|Methanoperedens", "Genus") %>%
   theme(axis.ticks.x = element_blank(),
         panel.border = element_blank(),
         axis.title.x = element_blank())
+```
 
+![](BriefReport_Reproducible_code_files/figure-gfm/Plot%20abundance%20of%20ANMEs%20and%20SEEP-SRB1-1.png)<!-- -->
+
+``` r
 searchTaxa(LP.ICE.DNA.rar, "SEEP-SRB1", "Genus") %>% 
   rownames() %>% 
   unique() %>% 
@@ -1431,7 +2499,11 @@ searchTaxa(LP.ICE.DNA.rar, "SEEP-SRB1", "Genus") %>%
   theme(axis.ticks.x = element_blank(),
         panel.border = element_blank(),
         axis.title.x = element_blank())
+```
 
+![](BriefReport_Reproducible_code_files/figure-gfm/Plot%20abundance%20of%20ANMEs%20and%20SEEP-SRB1-2.png)<!-- -->
+
+``` r
 # cDNA
 searchTaxa(LP.ICE.cDNA.rar, "ANME|Methanoperedens", "Genus") %>% 
   rownames() %>% 
@@ -1443,7 +2515,11 @@ searchTaxa(LP.ICE.cDNA.rar, "ANME|Methanoperedens", "Genus") %>%
   theme(axis.ticks.x = element_blank(),
         panel.border = element_blank(),
         axis.title.x = element_blank())
+```
 
+![](BriefReport_Reproducible_code_files/figure-gfm/Plot%20abundance%20of%20ANMEs%20and%20SEEP-SRB1-3.png)<!-- -->
+
+``` r
 searchTaxa(LP.ICE.cDNA.rar, "SEEP-SRB1", "Genus") %>% 
   rownames() %>% 
   unique() %>% 
@@ -1455,9 +2531,11 @@ searchTaxa(LP.ICE.cDNA.rar, "SEEP-SRB1", "Genus") %>%
         axis.title.x = element_blank())
 ```
 
+![](BriefReport_Reproducible_code_files/figure-gfm/Plot%20abundance%20of%20ANMEs%20and%20SEEP-SRB1-4.png)<!-- -->
+
 ### 4.5.2. DNA
 
-```{r Compute abundance of ANME DNA}
+``` r
 ANME1a <- searchTaxa(LP.ICE.DNA.rar, "ANME-1a", "Genus") %>% 
   rownames() %>% 
   unique() %>% 
@@ -1465,10 +2543,24 @@ ANME1a <- searchTaxa(LP.ICE.DNA.rar, "ANME-1a", "Genus") %>%
   psmelt() %>% 
   group_by(Sample,SampleName,Depth2,WinterGroup) %>% 
   summarize(ANME1a_abundance = sum(Abundance))
+```
 
+    ## `summarise()` has grouped output by 'Sample', 'SampleName', 'Depth2'. You can
+    ## override using the `.groups` argument.
+
+``` r
 ANME1a %>% group_by(WinterGroup) %>% summarize(ANME1a_mean_abundance = mean(ANME1a_abundance))
+```
 
+    ## # A tibble: 4 × 2
+    ##   WinterGroup ANME1a_mean_abundance
+    ##   <fct>                       <dbl>
+    ## 1 Snow                        0    
+    ## 2 Ice_core                    3.03 
+    ## 3 Bottom_core                 0.915
+    ## 4 Water                       2.93
 
+``` r
 ANME2a2b <- searchTaxa(LP.ICE.DNA.rar, "ANME-2a-2b", "Genus") %>% 
   rownames() %>% 
   unique() %>% 
@@ -1476,11 +2568,24 @@ ANME2a2b <- searchTaxa(LP.ICE.DNA.rar, "ANME-2a-2b", "Genus") %>%
   psmelt() %>% 
   group_by(Sample,SampleName,Depth2,WinterGroup) %>% 
   summarize(ANME2a2b_abundance = sum(Abundance))
+```
 
+    ## `summarise()` has grouped output by 'Sample', 'SampleName', 'Depth2'. You can
+    ## override using the `.groups` argument.
+
+``` r
 ANME2a2b %>% group_by(WinterGroup) %>% summarize(ANME2a2b_mean_abundance = mean(ANME2a2b_abundance))
 ```
 
-```{r Compute abundance of SEEP-SRB1 DNA}
+    ## # A tibble: 4 × 2
+    ##   WinterGroup ANME2a2b_mean_abundance
+    ##   <fct>                         <dbl>
+    ## 1 Snow                       0.000728
+    ## 2 Ice_core                   0.495   
+    ## 3 Bottom_core                0.0397  
+    ## 4 Water                      1.59
+
+``` r
 SEEP.SRB1 <- searchTaxa(LP.ICE.DNA.rar, "SEEP-SRB1", "Genus") %>% 
   rownames() %>% 
   unique() %>% 
@@ -1488,16 +2593,33 @@ SEEP.SRB1 <- searchTaxa(LP.ICE.DNA.rar, "SEEP-SRB1", "Genus") %>%
   psmelt() %>% 
   group_by(Sample,SampleName,Depth2,WinterGroup) %>% 
   summarize(SEEP_SRB1_abundance = sum(Abundance))
+```
 
+    ## `summarise()` has grouped output by 'Sample', 'SampleName', 'Depth2'. You can
+    ## override using the `.groups` argument.
+
+``` r
 SEEP.SRB1 %>% group_by(WinterGroup) %>% summarize(SEEP.SRB1_mean_abundance = mean(SEEP_SRB1_abundance))
 ```
 
-```{r Compute correlation ANME-SRB DNA}
+    ## # A tibble: 4 × 2
+    ##   WinterGroup SEEP.SRB1_mean_abundance
+    ##   <fct>                          <dbl>
+    ## 1 Snow                            0   
+    ## 2 Ice_core                        4.62
+    ## 3 Bottom_core                     1.06
+    ## 4 Water                           3.11
+
+``` r
 # ANME-1a
 ANME1a.SEEP <- ANME1a %>% 
   full_join(SEEP.SRB1) %>% 
   filter(WinterGroup != "Snow")
+```
 
+    ## Joining with `by = join_by(Sample, SampleName, Depth2, WinterGroup)`
+
+``` r
 ANME1a.SEEP %>% 
   ggplot(aes(x = ANME1a_abundance, y = SEEP_SRB1_abundance, col = WinterGroup, group = NA)) +
   geom_point() +
@@ -1505,26 +2627,67 @@ ANME1a.SEEP %>%
   scale_colour_manual(values=c("#4DBBD5FF","#E64B35FF","#3C5488FF")) +
   # geom_label_repel(aes(label = SampleName)) +
   theme_bw()
+```
 
+    ## `geom_smooth()` using formula = 'y ~ x'
+
+![](BriefReport_Reproducible_code_files/figure-gfm/Compute%20correlation%20ANME-SRB%20DNA-1.png)<!-- -->
+
+``` r
 cor.test(ANME1a.SEEP$ANME1a_abundance, ANME1a.SEEP$SEEP_SRB1_abundance, method = "spearman")
+```
 
+    ## 
+    ##  Spearman's rank correlation rho
+    ## 
+    ## data:  ANME1a.SEEP$ANME1a_abundance and ANME1a.SEEP$SEEP_SRB1_abundance
+    ## S = 4076, p-value = 0.02855
+    ## alternative hypothesis: true rho is not equal to 0
+    ## sample estimates:
+    ##       rho 
+    ## 0.3772345
+
+``` r
 # ANME-2a-2b
 ANME2a2b.SEEP <- ANME2a2b %>% 
   full_join(SEEP.SRB1) %>% 
   filter(WinterGroup != "Snow")
+```
 
+    ## Joining with `by = join_by(Sample, SampleName, Depth2, WinterGroup)`
+
+``` r
 ANME2a2b.SEEP %>% 
   ggplot(aes(x = ANME2a2b_abundance, y = SEEP_SRB1_abundance)) +
   geom_point() +
   geom_smooth(method = "lm") +
   theme_bw()
+```
 
+    ## `geom_smooth()` using formula = 'y ~ x'
+
+![](BriefReport_Reproducible_code_files/figure-gfm/Compute%20correlation%20ANME-SRB%20DNA-2.png)<!-- -->
+
+``` r
 cor.test(ANME2a2b.SEEP$ANME2a2b_abundance, ANME2a2b.SEEP$SEEP_SRB1_abundance, method = "spearman")
 ```
 
+    ## Warning in cor.test.default(ANME2a2b.SEEP$ANME2a2b_abundance,
+    ## ANME2a2b.SEEP$SEEP_SRB1_abundance, : Cannot compute exact p-value with ties
+
+    ## 
+    ##  Spearman's rank correlation rho
+    ## 
+    ## data:  ANME2a2b.SEEP$ANME2a2b_abundance and ANME2a2b.SEEP$SEEP_SRB1_abundance
+    ## S = 5316.9, p-value = 0.2879
+    ## alternative hypothesis: true rho is not equal to 0
+    ## sample estimates:
+    ##       rho 
+    ## 0.1876385
+
 ### 4.5.2. cDNA
 
-```{r Compute abundance of ANME cDNA}
+``` r
 ANME1a <- searchTaxa(LP.ICE.cDNA.rar, "ANME-1a", "Genus") %>% 
   rownames() %>% 
   unique() %>% 
@@ -1532,7 +2695,12 @@ ANME1a <- searchTaxa(LP.ICE.cDNA.rar, "ANME-1a", "Genus") %>%
   psmelt() %>% 
   group_by(Sample,SampleName,Depth2,WinterGroup) %>% 
   summarize(ANME1a_abundance = sum(Abundance))
+```
 
+    ## `summarise()` has grouped output by 'Sample', 'SampleName', 'Depth2'. You can
+    ## override using the `.groups` argument.
+
+``` r
 ANME2a2b <- searchTaxa(LP.ICE.cDNA.rar, "ANME-2a-2b", "Genus") %>% 
   rownames() %>% 
   unique() %>% 
@@ -1542,7 +2710,10 @@ ANME2a2b <- searchTaxa(LP.ICE.cDNA.rar, "ANME-2a-2b", "Genus") %>%
   summarize(ANME2a2b_abundance = sum(Abundance))
 ```
 
-```{r Compute abundance of SEEP-SRB1 cDNA}
+    ## `summarise()` has grouped output by 'Sample', 'SampleName', 'Depth2'. You can
+    ## override using the `.groups` argument.
+
+``` r
 SEEP.SRB1 <- searchTaxa(LP.ICE.cDNA.rar, "SEEP-SRB1", "Genus") %>% 
   rownames() %>% 
   unique() %>% 
@@ -1552,38 +2723,82 @@ SEEP.SRB1 <- searchTaxa(LP.ICE.cDNA.rar, "SEEP-SRB1", "Genus") %>%
   summarize(SEEP_SRB1_abundance = sum(Abundance))
 ```
 
+    ## `summarise()` has grouped output by 'Sample', 'SampleName', 'Depth2'. You can
+    ## override using the `.groups` argument.
 
-```{r Compute correlation ANME-SRB cDNA}
+``` r
 # ANME-1a
 ANME1a.SEEP <- ANME1a %>% 
   full_join(SEEP.SRB1) %>% 
   filter(WinterGroup != "Snow") # For ecological relevance, removing the Snow samples from the computations
+```
 
+    ## Joining with `by = join_by(Sample, SampleName, Depth2, WinterGroup)`
+
+``` r
 ANME1a.SEEP %>% 
   ggplot(aes(x = ANME1a_abundance, y = SEEP_SRB1_abundance, col = WinterGroup, group = NA)) +
   geom_point() +
   geom_smooth(method = "lm", linewidth = .5, color = "gray30") +
   scale_colour_manual(values=c("#4DBBD5FF","#E64B35FF","#3C5488FF")) +
   theme_bw()
+```
 
+    ## `geom_smooth()` using formula = 'y ~ x'
+
+![](BriefReport_Reproducible_code_files/figure-gfm/Compute%20correlation%20ANME-SRB%20cDNA-1.png)<!-- -->
+
+``` r
 cor.test(ANME1a.SEEP$ANME1a_abundance, ANME1a.SEEP$SEEP_SRB1_abundance, method = "spearman")
+```
 
+    ## 
+    ##  Spearman's rank correlation rho
+    ## 
+    ## data:  ANME1a.SEEP$ANME1a_abundance and ANME1a.SEEP$SEEP_SRB1_abundance
+    ## S = 1754, p-value = 0.000123
+    ## alternative hypothesis: true rho is not equal to 0
+    ## sample estimates:
+    ##      rho 
+    ## 0.646371
+
+``` r
 # ANME-2a-2b
 ANME2a2b.SEEP <- ANME2a2b %>% 
   full_join(SEEP.SRB1) %>% 
   filter(WinterGroup != "Snow") 
+```
 
+    ## Joining with `by = join_by(Sample, SampleName, Depth2, WinterGroup)`
+
+``` r
 ANME2a2b.SEEP %>% 
   ggplot(aes(x = ANME2a2b_abundance, y = SEEP_SRB1_abundance, col = WinterGroup, group = NA)) +
   geom_point() +
   geom_smooth(method = "lm", linewidth = .5, color = "gray30") +
   scale_colour_manual(values=c("#4DBBD5FF","#E64B35FF","#3C5488FF")) +
   theme_bw()
+```
 
+    ## `geom_smooth()` using formula = 'y ~ x'
+
+![](BriefReport_Reproducible_code_files/figure-gfm/Compute%20correlation%20ANME-SRB%20cDNA-2.png)<!-- -->
+
+``` r
 cor.test(ANME2a2b.SEEP$ANME2a2b_abundance, ANME2a2b.SEEP$SEEP_SRB1_abundance, method = "spearman")
 ```
 
-```{r Supplementary Figure 3}
+    ## 
+    ##  Spearman's rank correlation rho
+    ## 
+    ## data:  ANME2a2b.SEEP$ANME2a2b_abundance and ANME2a2b.SEEP$SEEP_SRB1_abundance
+    ## S = 3630, p-value = 0.1444
+    ## alternative hypothesis: true rho is not equal to 0
+    ## sample estimates:
+    ##       rho 
+    ## 0.2681452
+
+``` r
 # DNA
 SEEP.SRB1.DNA <- searchTaxa(LP.ICE.DNA.rar, "SEEP-SRB1", "Genus") %>% 
   rownames() %>% 
@@ -1593,7 +2808,12 @@ SEEP.SRB1.DNA <- searchTaxa(LP.ICE.DNA.rar, "SEEP-SRB1", "Genus") %>%
   group_by(Sample,SampleName,Depth2,WinterGroup) %>% 
   summarize(SEEP_SRB1_abundance = sum(Abundance)) %>% 
   mutate(Dataset = as.factor("DNA"))
+```
 
+    ## `summarise()` has grouped output by 'Sample', 'SampleName', 'Depth2'. You can
+    ## override using the `.groups` argument.
+
+``` r
 ANME1a.DNA <- searchTaxa(LP.ICE.DNA.rar, "ANME-1a", "Genus") %>% 
   rownames() %>% 
   unique() %>% 
@@ -1602,7 +2822,12 @@ ANME1a.DNA <- searchTaxa(LP.ICE.DNA.rar, "ANME-1a", "Genus") %>%
   group_by(Sample,SampleName,Depth2,WinterGroup) %>% 
   summarize(ANME1a_abundance = sum(Abundance)) %>% 
   mutate(Dataset = as.factor("DNA"))
+```
 
+    ## `summarise()` has grouped output by 'Sample', 'SampleName', 'Depth2'. You can
+    ## override using the `.groups` argument.
+
+``` r
 ANME2a2b.DNA <- searchTaxa(LP.ICE.DNA.rar, "ANME-2a-2b", "Genus") %>% 
   rownames() %>% 
   unique() %>% 
@@ -1611,7 +2836,12 @@ ANME2a2b.DNA <- searchTaxa(LP.ICE.DNA.rar, "ANME-2a-2b", "Genus") %>%
   group_by(Sample,SampleName,Depth2,WinterGroup) %>% 
   summarize(ANME2a2b_abundance = sum(Abundance)) %>% 
   mutate(Dataset = as.factor("DNA"))
+```
 
+    ## `summarise()` has grouped output by 'Sample', 'SampleName', 'Depth2'. You can
+    ## override using the `.groups` argument.
+
+``` r
 # cDNA
 SEEP.SRB1.cDNA <- searchTaxa(LP.ICE.cDNA.rar, "SEEP-SRB1", "Genus") %>% 
   rownames() %>% 
@@ -1621,7 +2851,12 @@ SEEP.SRB1.cDNA <- searchTaxa(LP.ICE.cDNA.rar, "SEEP-SRB1", "Genus") %>%
   group_by(Sample,SampleName,Depth2,WinterGroup) %>% 
   summarize(SEEP_SRB1_abundance = sum(Abundance)) %>% 
   mutate(Dataset = as.factor("cDNA"))
+```
 
+    ## `summarise()` has grouped output by 'Sample', 'SampleName', 'Depth2'. You can
+    ## override using the `.groups` argument.
+
+``` r
 ANME1a.cDNA <- searchTaxa(LP.ICE.cDNA.rar, "ANME-1a", "Genus") %>% 
   rownames() %>% 
   unique() %>% 
@@ -1630,7 +2865,12 @@ ANME1a.cDNA <- searchTaxa(LP.ICE.cDNA.rar, "ANME-1a", "Genus") %>%
   group_by(Sample,SampleName,Depth2,WinterGroup) %>% 
   summarize(ANME1a_abundance = sum(Abundance)) %>% 
   mutate(Dataset = as.factor("cDNA"))
+```
 
+    ## `summarise()` has grouped output by 'Sample', 'SampleName', 'Depth2'. You can
+    ## override using the `.groups` argument.
+
+``` r
 ANME2a2b.cDNA <- searchTaxa(LP.ICE.cDNA.rar, "ANME-2a-2b", "Genus") %>% 
   rownames() %>% 
   unique() %>% 
@@ -1639,16 +2879,31 @@ ANME2a2b.cDNA <- searchTaxa(LP.ICE.cDNA.rar, "ANME-2a-2b", "Genus") %>%
   group_by(Sample,SampleName,Depth2,WinterGroup) %>% 
   summarize(ANME2a2b_abundance = sum(Abundance)) %>% 
   mutate(Dataset = as.factor("cDNA"))
+```
 
+    ## `summarise()` has grouped output by 'Sample', 'SampleName', 'Depth2'. You can
+    ## override using the `.groups` argument.
+
+``` r
 # Join tables
 SRB.ANME.DNA <- SEEP.SRB1.DNA %>% 
   full_join(ANME1a.DNA) %>% 
   full_join(ANME2a2b.DNA) 
+```
 
+    ## Joining with `by = join_by(Sample, SampleName, Depth2, WinterGroup, Dataset)`
+    ## Joining with `by = join_by(Sample, SampleName, Depth2, WinterGroup, Dataset)`
+
+``` r
 SRB.ANME.cDNA <- SEEP.SRB1.cDNA %>% 
   full_join(ANME1a.cDNA) %>% 
   full_join(ANME2a2b.cDNA)
+```
 
+    ## Joining with `by = join_by(Sample, SampleName, Depth2, WinterGroup, Dataset)`
+    ## Joining with `by = join_by(Sample, SampleName, Depth2, WinterGroup, Dataset)`
+
+``` r
 SRB.ANME <- bind_rows(SRB.ANME.DNA,SRB.ANME.cDNA)
 
 # Check normality
@@ -1659,7 +2914,20 @@ SRB.ANME %>%
   group_by(Dataset, Genus) %>%
   group_modify(~ modified_shapiro_test(.x$Abundance)) %>%
   filter(p.value <= 0.05) # Non gaussian data for all groups
+```
 
+    ## # A tibble: 6 × 4
+    ## # Groups:   Dataset, Genus [6]
+    ##   Dataset Genus                 p.value statistic
+    ##   <fct>   <chr>                   <dbl>     <dbl>
+    ## 1 DNA     ANME1a_abundance    0.00112       0.894
+    ## 2 DNA     ANME2a2b_abundance  0.0000741     0.850
+    ## 3 DNA     SEEP_SRB1_abundance 0.00367       0.911
+    ## 4 cDNA    ANME1a_abundance    0.0284        0.933
+    ## 5 cDNA    ANME2a2b_abundance  0.000559      0.873
+    ## 6 cDNA    SEEP_SRB1_abundance 0.00150       0.889
+
+``` r
 # Draw figure
 ## ANME 1a
 SRB.ANME %>% 
@@ -1675,8 +2943,19 @@ SRB.ANME %>%
         panel.background = element_blank(),
         axis.line = element_line(colour = "black", linewidth = .2),
         legend.position = "none")
-ggsave("~/Desktop/SupplementaryFigure3A.pdf", width = 5, height = 3)
+```
 
+    ## `geom_smooth()` using formula = 'y ~ x'
+
+![](BriefReport_Reproducible_code_files/figure-gfm/Supplementary%20Figure%203-1.png)<!-- -->
+
+``` r
+ggsave("~/Desktop/SupplementaryFigure3A.pdf", width = 5, height = 3)
+```
+
+    ## `geom_smooth()` using formula = 'y ~ x'
+
+``` r
 ## ANME2a-2b
 SRB.ANME %>% 
   filter(WinterGroup != "Snow") %>% 
@@ -1694,10 +2973,17 @@ SRB.ANME %>%
         legend.position = "none")
 ```
 
+    ## `geom_smooth()` using formula = 'y ~ x'
+
+    ## Warning: Removed 2 rows containing non-finite values (`stat_smooth()`).
+
+    ## Warning: Removed 2 rows containing missing values (`geom_point()`).
+
+![](BriefReport_Reproducible_code_files/figure-gfm/Supplementary%20Figure%203-2.png)<!-- -->
 
 ## 4.6-DNA/cDNA discrepancy for SR/SO
 
-```{r DNA/cDNA discrepancy}
+``` r
 ########## SRB ##########
 
 SEEP.SRB1 <- searchTaxa(LP.ICE.DNA.rar, "SEEP-SRB1", "Genus") %>% 
@@ -1707,7 +2993,12 @@ SEEP.SRB1 <- searchTaxa(LP.ICE.DNA.rar, "SEEP-SRB1", "Genus") %>%
   psmelt() %>% 
   group_by(Sample,SampleName,Depth2,WinterGroup) %>% 
   summarize(SEEP_SRB1_abundance = sum(Abundance))
+```
 
+    ## `summarise()` has grouped output by 'Sample', 'SampleName', 'Depth2'. You can
+    ## override using the `.groups` argument.
+
+``` r
 SEEP.SRB1.cDNA <- searchTaxa(LP.ICE.cDNA.rar, "SEEP-SRB1", "Genus") %>% 
   rownames() %>% 
   unique() %>% 
@@ -1715,13 +3006,23 @@ SEEP.SRB1.cDNA <- searchTaxa(LP.ICE.cDNA.rar, "SEEP-SRB1", "Genus") %>%
   psmelt() %>% 
   group_by(Sample,SampleName,Depth2,WinterGroup) %>% 
   summarize(SEEP_SRB1_abundance = sum(Abundance))
+```
 
+    ## `summarise()` has grouped output by 'Sample', 'SampleName', 'Depth2'. You can
+    ## override using the `.groups` argument.
+
+``` r
 SEEP.SRB1.discrepancy <- SEEP.SRB1 %>% 
   rename(SEEP_SRB1_abundance_DNA = SEEP_SRB1_abundance) %>%
   left_join(SEEP.SRB1.cDNA %>% rename(SEEP_SRB1_abundance_cDNA = SEEP_SRB1_abundance)) %>% 
   mutate(Discrepancy = SEEP_SRB1_abundance_cDNA/SEEP_SRB1_abundance_DNA) %>% 
   left_join(samples)
+```
 
+    ## Joining with `by = join_by(Sample, SampleName, Depth2, WinterGroup)`
+    ## Joining with `by = join_by(Sample, SampleName, WinterGroup)`
+
+``` r
 # dummy <- data.frame(
 #   SampleName = c("LP_ICE_21_Dummy1_100-110","LP_ICE_21_Dummy3_100-110"),
 #   Depth2 = c("100-110","100-110"),
@@ -1755,7 +3056,22 @@ SEEP.SRB1.discrepancy %>%
         strip.background = element_blank(),
         panel.spacing = unit(.3,"line")) +
   geom_hline(yintercept = 1, linewidth = .4, colour = "black", linetype = "dashed", alpha = 1)
+```
 
+    ## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+    ## ℹ Please use `linewidth` instead.
+    ## This warning is displayed once every 8 hours.
+    ## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+    ## generated.
+
+    ## Warning in geom_col(stat = "identity", position = position_dodge2(preserve =
+    ## "single"), : Ignoring unknown parameters: `stat`
+
+    ## Warning: Removed 3 rows containing missing values (`geom_col()`).
+
+![](BriefReport_Reproducible_code_files/figure-gfm/DNA/cDNA%20discrepancy-1.png)<!-- -->
+
+``` r
 ######### SOB ########
 
 SOB <- searchTaxa(LP.ICE.DNA.rar, "Sulfurimonas|Thiomicrorhabdus", "Genus") %>% 
@@ -1765,7 +3081,12 @@ SOB <- searchTaxa(LP.ICE.DNA.rar, "Sulfurimonas|Thiomicrorhabdus", "Genus") %>%
   psmelt() %>% 
   group_by(Sample,SampleName,Depth2,WinterGroup) %>% 
   summarize(SOB_abundance = sum(Abundance))
+```
 
+    ## `summarise()` has grouped output by 'Sample', 'SampleName', 'Depth2'. You can
+    ## override using the `.groups` argument.
+
+``` r
 SOB.cDNA <- searchTaxa(LP.ICE.cDNA.rar, "Sulfurimonas|Thiomicrorhabdus", "Genus") %>% 
   rownames() %>% 
   unique() %>% 
@@ -1773,13 +3094,23 @@ SOB.cDNA <- searchTaxa(LP.ICE.cDNA.rar, "Sulfurimonas|Thiomicrorhabdus", "Genus"
   psmelt() %>% 
   group_by(Sample,SampleName,Depth2,WinterGroup) %>% 
   summarize(SOB_abundance = sum(Abundance))
+```
 
+    ## `summarise()` has grouped output by 'Sample', 'SampleName', 'Depth2'. You can
+    ## override using the `.groups` argument.
+
+``` r
 SOB.discrepancy <- SOB %>% 
   rename(SOB_abundance_DNA = SOB_abundance) %>%
   right_join(SOB.cDNA %>% rename(SOB_abundance_cDNA = SOB_abundance)) %>% 
   mutate(Discrepancy = SOB_abundance_cDNA/SOB_abundance_DNA) %>% 
   left_join(samples) 
+```
 
+    ## Joining with `by = join_by(Sample, SampleName, Depth2, WinterGroup)`
+    ## Joining with `by = join_by(Sample, SampleName, WinterGroup)`
+
+``` r
 SOB.discrepancy %>% 
   filter(Environment != "Snow") %>% 
   ggplot(aes(x = Sample, y = Discrepancy, fill = Feature)) +
@@ -1805,7 +3136,14 @@ SOB.discrepancy %>%
         strip.background = element_blank(),
         panel.spacing = unit(.3,"line")) +
   geom_hline(yintercept = 1, linewidth = .4, colour = "black", linetype = "dashed", alpha = 1)
+```
 
+    ## Warning in geom_col(stat = "identity", position = position_dodge2(preserve =
+    ## "single"), : Ignoring unknown parameters: `stat`
+
+![](BriefReport_Reproducible_code_files/figure-gfm/DNA/cDNA%20discrepancy-2.png)<!-- -->
+
+``` r
 ######### SRB/SOB #########
 
 # SEEP.SRB1.discrepancy %>% 
@@ -1825,4 +3163,3 @@ SOB.discrepancy %>%
 #            stat = "identity",
 #            position = position_dodge2())
 ```
-
