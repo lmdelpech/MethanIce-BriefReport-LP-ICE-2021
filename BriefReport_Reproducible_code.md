@@ -93,10 +93,10 @@ Lisa-Marie Delpech
     id="toc-45-anme-srb-correlations-supplementary-information">4.5-ANME-SRB
     correlations: <strong>Supplementary Information</strong></a>
     - <a href="#451-plot-anme-and-seep-srb1-abundances"
-      id="toc-451-plot-anme-and-seep-srb1-abundances">4.5.1. Plot ANME and
+      id="toc-451-plot-anme-and-seep-srb1-abundances">4.5.1.-Plot ANME and
       SEEP-SRB1 abundances</a>
-    - <a href="#452-dna" id="toc-452-dna">4.5.2. DNA</a>
-    - <a href="#452-cdna" id="toc-452-cdna">4.5.2. cDNA</a>
+    - <a href="#452-dna" id="toc-452-dna">4.5.2.-DNA</a>
+    - <a href="#452-cdna" id="toc-452-cdna">4.5.2.-cDNA</a>
   - <a href="#46-dnacdna-discrepancy-for-srso"
     id="toc-46-dnacdna-discrepancy-for-srso">4.6-DNA/cDNA discrepancy for
     SR/SO</a>
@@ -2471,7 +2471,7 @@ LP.ICE.cDNA.rar %>%
 
 ## 4.5-ANME-SRB correlations: **Supplementary Information**
 
-### 4.5.1. Plot ANME and SEEP-SRB1 abundances
+### 4.5.1.-Plot ANME and SEEP-SRB1 abundances
 
 ``` r
 # DNA
@@ -2533,7 +2533,7 @@ searchTaxa(LP.ICE.cDNA.rar, "SEEP-SRB1", "Genus") %>%
 
 ![](BriefReport_Reproducible_code_files/figure-gfm/Plot%20abundance%20of%20ANMEs%20and%20SEEP-SRB1-4.png)<!-- -->
 
-### 4.5.2. DNA
+### 4.5.2.-DNA
 
 ``` r
 ANME1a <- searchTaxa(LP.ICE.DNA.rar, "ANME-1a", "Genus") %>% 
@@ -2685,7 +2685,7 @@ cor.test(ANME2a2b.SEEP$ANME2a2b_abundance, ANME2a2b.SEEP$SEEP_SRB1_abundance, me
     ##       rho 
     ## 0.1876385
 
-### 4.5.2. cDNA
+### 4.5.2.-cDNA
 
 ``` r
 ANME1a <- searchTaxa(LP.ICE.cDNA.rar, "ANME-1a", "Genus") %>% 
@@ -3040,6 +3040,15 @@ SEEP.SRB1.discrepancy %>%
            size = 0.2,
            alpha = 0.85,
            width = .95) +
+  geom_text(data = SEEP.SRB1.discrepancy %>%
+              group_by(Depth2) %>%
+              mutate(Mean_SEEP_abundance_DNA = mean(SEEP_SRB1_abundance_DNA),
+                     y = max(Discrepancy, na.rm = TRUE)) %>%
+              ungroup() %>%
+              filter(grepl("Core2|Water2", SampleName)) %>%
+              filter(Depth2 != "Snow"),
+            aes(x = SampleName, y = y+0.3, label = round(Mean_SEEP_abundance_DNA, digits = 2)),
+            size = 2) +
   geom_blank(data = data.frame(Sample = c("LP_ICE_21_Core1_blank","LP_ICE_21_Core3_blank"),
                         Discrepancy = c(0,0),
                         Feature = c("Core1","Core3"),
@@ -3047,7 +3056,7 @@ SEEP.SRB1.discrepancy %>%
                mutate(Depth2 = factor(Depth2, levels = levels(SEEP.SRB1.discrepancy$Depth2))) %>% 
               mutate(Feature = factor(Feature, levels = levels(SEEP.SRB1.discrepancy$Feature))))  +
   facet_grid(cols = vars(Depth2), scales = "free") +
-  labs(y = "cDNA/DNA abundance ratio", x = "") +
+  labs(y = "SEEP-SRB1 cDNA/DNA abundance ratio", x = "") +
   scale_fill_manual(values = c(pal_npg()(6)[4:6],rep("grey50",3))) +
   theme_bw() +
   theme(panel.grid.major.x = element_blank(),
@@ -3069,7 +3078,13 @@ SEEP.SRB1.discrepancy %>%
 
     ## Warning: Removed 3 rows containing missing values (`geom_col()`).
 
-![](BriefReport_Reproducible_code_files/figure-gfm/DNA/cDNA%20discrepancy-1.png)<!-- -->
+![](BriefReport_Reproducible_code_files/figure-gfm/DNA%20cDNA%20discrepancy-1.png)<!-- -->
+
+``` r
+ggsave("~/Desktop/SupplementaryFigure4A.pdf", width = 5.5, height = 3.5)
+```
+
+    ## Warning: Removed 3 rows containing missing values (`geom_col()`).
 
 ``` r
 ######### SOB ########
@@ -3102,7 +3117,7 @@ SOB.cDNA <- searchTaxa(LP.ICE.cDNA.rar, "Sulfurimonas|Thiomicrorhabdus", "Genus"
 ``` r
 SOB.discrepancy <- SOB %>% 
   rename(SOB_abundance_DNA = SOB_abundance) %>%
-  right_join(SOB.cDNA %>% rename(SOB_abundance_cDNA = SOB_abundance)) %>% 
+  left_join(SOB.cDNA %>% rename(SOB_abundance_cDNA = SOB_abundance)) %>% 
   mutate(Discrepancy = SOB_abundance_cDNA/SOB_abundance_DNA) %>% 
   left_join(samples) 
 ```
@@ -3113,21 +3128,35 @@ SOB.discrepancy <- SOB %>%
 ``` r
 SOB.discrepancy %>% 
   filter(Environment != "Snow") %>% 
-  ggplot(aes(x = Sample, y = Discrepancy, fill = Feature)) +
-  geom_col(stat = 'identity',
+  ggplot() +
+  geom_col(aes(x = Sample, y = Discrepancy, fill = Feature),
+           stat = 'identity',
            position = position_dodge2(preserve = 'single'),
            colour = "transparent",
            size = 0.2,
            alpha = 0.85,
            width = .95) +
+  geom_text(data = SOB.discrepancy %>%
+              group_by(Depth2) %>%
+              mutate(Mean_SOB_abundance_DNA = mean(SOB_abundance_DNA),
+                     y = max(Discrepancy, na.rm = TRUE)) %>%
+              ungroup() %>%
+              filter(grepl("Core2|Water2", SampleName)) %>%
+              filter(Depth2 != "Snow"),
+            aes(x = SampleName, y = y+1, label = round(Mean_SOB_abundance_DNA, digits = 2), # paste0(round(Mean_SOB_abundance_DNA, digits = 2), " %")
+                #angle = 90
+                ),
+            size = 2) +
   geom_blank(data = data.frame(Sample = c("LP_ICE_21_Core1_blank","LP_ICE_21_Core3_blank"),
                         Discrepancy = c(0,0),
                         Feature = c("Core1","Core3"),
                         Depth2 = c("100-110","100-110")) %>% 
                mutate(Depth2 = factor(Depth2, levels = levels(SOB.discrepancy$Depth2))) %>% 
-              mutate(Feature = factor(Feature, levels = levels(SOB.discrepancy$Feature))))  +
+              mutate(Feature = factor(Feature, levels = levels(SOB.discrepancy$Feature))),
+             aes(x = Sample, y = Discrepancy, fill = Feature)) +
   facet_grid(cols = vars(Depth2), scales = "free") +
-  labs(y = "cDNA/DNA abundance ratio", x = "") +
+  ylim(c(0,24)) +
+  labs(y = "SOB cDNA/DNA abundance ratio", x = "") +
   scale_fill_manual(values = c(pal_npg()(6)[4:6],rep("grey50",3))) +
   theme_bw() +
   theme(panel.grid.major.x = element_blank(),
@@ -3138,10 +3167,16 @@ SOB.discrepancy %>%
   geom_hline(yintercept = 1, linewidth = .4, colour = "black", linetype = "dashed", alpha = 1)
 ```
 
-    ## Warning in geom_col(stat = "identity", position = position_dodge2(preserve =
-    ## "single"), : Ignoring unknown parameters: `stat`
+    ## Warning in geom_col(aes(x = Sample, y = Discrepancy, fill = Feature), stat = "identity", : Ignoring unknown parameters: `stat`
+    ## Removed 3 rows containing missing values (`geom_col()`).
 
-![](BriefReport_Reproducible_code_files/figure-gfm/DNA/cDNA%20discrepancy-2.png)<!-- -->
+![](BriefReport_Reproducible_code_files/figure-gfm/DNA%20cDNA%20discrepancy-2.png)<!-- -->
+
+``` r
+ggsave("~/Desktop/SupplementaryFigure4B.pdf", width = 5.5, height = 3.5)
+```
+
+    ## Warning: Removed 3 rows containing missing values (`geom_col()`).
 
 ``` r
 ######### SRB/SOB #########
