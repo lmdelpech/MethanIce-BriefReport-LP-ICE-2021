@@ -3,107 +3,74 @@ MethanIce_BriefReport_Reproducible_Code
 Lisa-Marie Delpech
 2023-09-12
 
-- <a href="#documentation" id="toc-documentation">Documentation</a>
-- <a href="#0-source-functions" id="toc-0-source-functions">0-Source
-  functions</a>
-  - <a href="#01-packages" id="toc-01-packages">0.1-Packages</a>
-  - <a href="#02-internal-functions"
-    id="toc-02-internal-functions">0.2-Internal functions</a>
-- <a href="#1-data-wrangling" id="toc-1-data-wrangling">1-Data
-  wrangling</a>
-  - <a href="#11-sequence-processing-pipeline"
-    id="toc-11-sequence-processing-pipeline">1.1-Sequence processing
-    pipeline</a>
-  - <a href="#12-import-data-in-r-and-parse-taxonomy"
-    id="toc-12-import-data-in-r-and-parse-taxonomy">1.2-Import data in R and
-    parse taxonomy</a>
-  - <a href="#13-data-wrangling" id="toc-13-data-wrangling">1.3-Data
-    wrangling</a>
-    - <a href="#131-remove-control-sequences"
-      id="toc-131-remove-control-sequences">1.3.1-Remove control sequences</a>
-    - <a href="#132-format-column-names"
-      id="toc-132-format-column-names">1.3.2-Format column names</a>
-    - <a href="#134-remove-singletons"
-      id="toc-134-remove-singletons">1.3.4-Remove singletons</a>
-  - <a href="#14-rarefaction" id="toc-14-rarefaction">1.4-Rarefaction</a>
-    - <a href="#141-library-sizes" id="toc-141-library-sizes">1.4.1-Library
-      sizes</a>
-    - <a href="#142-rarefaction-curves"
-      id="toc-142-rarefaction-curves">1.4.2-Rarefaction curves</a>
-    - <a href="#143-import-in-phyloseq"
-      id="toc-143-import-in-phyloseq">1.4.3-Import in
-      <code>phyloseq</code></a>
-    - <a href="#144-rarefy-to-even-depth"
-      id="toc-144-rarefy-to-even-depth">1.4.4-Rarefy to even depth</a>
-  - <a href="#15-add-sample-metadata"
-    id="toc-15-add-sample-metadata">1.5-Add sample metadata</a>
-- <a href="#2-beta-diversity-and-16s-counts-figure-1a"
-  id="toc-2-beta-diversity-and-16s-counts-figure-1a">2-Beta diversity and
-  16S counts: <strong>Figure 1A</strong></a>
-  - <a href="#21-test-group-differences-supplementary-information"
-    id="toc-21-test-group-differences-supplementary-information">2.1-Test
-    group differences (<strong>Supplementary Information</strong>)</a>
-    - <a href="#211-dna" id="toc-211-dna">2.1.1-DNA</a>
-    - <a href="#212-cdna" id="toc-212-cdna">2.1.2-cDNA</a>
-  - <a href="#22-ordination-figure-1a"
-    id="toc-22-ordination-figure-1a">2.2-Ordination (<strong>Figure
-    1A</strong>)</a>
-    - <a
-      href="#221-rarefaction-of-a-combined-dnacdna-dataset-to-compare-beta-diversity"
-      id="toc-221-rarefaction-of-a-combined-dnacdna-dataset-to-compare-beta-diversity">2.2.1-Rarefaction
-      of a combined DNA/cDNA dataset to compare beta diversity</a>
-    - <a href="#222-16s-dna-quantification-with-qpcr-data"
-      id="toc-222-16s-dna-quantification-with-qpcr-data">2.2.2-16S DNA
-      quantification with qPCR data</a>
-    - <a href="#223-pca-figure-1a" id="toc-223-pca-figure-1a">2.2.3-PCA Figure
-      1A</a>
-  - <a href="#23-16s-count-statistics-supplementary-information"
-    id="toc-23-16s-count-statistics-supplementary-information">2.3-16S count
-    statistics (<strong>Supplementary Information</strong>)</a>
-- <a href="#3-alpha-diversity-figure-1b"
-  id="toc-3-alpha-diversity-figure-1b">3-Alpha diversity: <strong>Figure
-  1B</strong></a>
-  - <a href="#31-compute-alpha-diversity-for-both-datasets"
-    id="toc-31-compute-alpha-diversity-for-both-datasets">3.1-Compute alpha
-    diversity for both datasets</a>
-  - <a href="#32-test-for-group-differences-in-alpha-diversity"
-    id="toc-32-test-for-group-differences-in-alpha-diversity">3.2-Test for
-    group differences in alpha diversity</a>
-  - <a href="#33-plot-alpha-diversity-figure-1b"
-    id="toc-33-plot-alpha-diversity-figure-1b">3.3-Plot alpha diversity
-    (<strong>Figure 1B</strong>)</a>
-- <a href="#4-taxonomic-composition-figure-1c"
-  id="toc-4-taxonomic-composition-figure-1c">4-Taxonomic composition:
-  <strong>Figure 1C</strong></a>
-  - <a href="#41-transform-sample-counts"
-    id="toc-41-transform-sample-counts">4.1-Transform sample counts</a>
-  - <a href="#42-taxonomy-color-dataframe"
-    id="toc-42-taxonomy-color-dataframe">4.2-Taxonomy color dataframe</a>
-  - <a href="#43-taxonomy-barplot-figure-1c"
-    id="toc-43-taxonomy-barplot-figure-1c">4.3-Taxonomy barplot
-    (<strong>Figure 1C</strong>)</a>
-  - <a href="#44-chloroplast-reads-figure-1c"
-    id="toc-44-chloroplast-reads-figure-1c">4.4-Chloroplast reads
-    (<strong>Figure 1C</strong>)</a>
-  - <a
-    href="#45-abundance-of-sulfurimonas-and-thiomicrorhabdus-dominant-asvs"
-    id="toc-45-abundance-of-sulfurimonas-and-thiomicrorhabdus-dominant-asvs">4.5-Abundance
-    of <em>Sulfurimonas</em> and <em>Thiomicrorhabdus</em> dominant ASVs</a>
-  - <a href="#45-anme-srb-correlations-supplementary-information"
-    id="toc-45-anme-srb-correlations-supplementary-information">4.5-ANME-SRB
-    correlations: <strong>Supplementary Information</strong></a>
-    - <a href="#451-plot-anme-and-seep-srb1-abundances"
-      id="toc-451-plot-anme-and-seep-srb1-abundances">4.5.1. Plot ANME and
-      SEEP-SRB1 abundances</a>
-    - <a href="#452-dna" id="toc-452-dna">4.5.2. DNA</a>
-    - <a href="#452-cdna" id="toc-452-cdna">4.5.2. cDNA</a>
+- [Documentation](#documentation)
+- [0-Source functions](#0-source-functions)
+  - [0.1-Packages](#01-packages)
+  - [0.2-Internal functions](#02-internal-functions)
+- [1-Data wrangling](#1-data-wrangling)
+  - [1.1-Sequence processing pipeline](#11-sequence-processing-pipeline)
+  - [1.2-Import data in R and parse
+    taxonomy](#12-import-data-in-r-and-parse-taxonomy)
+  - [1.3-Data wrangling](#13-data-wrangling)
+    - [1.3.1-Remove control sequences](#131-remove-control-sequences)
+    - [1.3.2-Format column names](#132-format-column-names)
+    - [1.3.4-Remove singletons](#134-remove-singletons)
+  - [1.4-Rarefaction](#14-rarefaction)
+    - [1.4.1-Library sizes](#141-library-sizes)
+    - [1.4.2-Rarefaction curves](#142-rarefaction-curves)
+    - [1.4.3-Import in `phyloseq`](#143-import-in-phyloseq)
+    - [1.4.4-Rarefy to even depth](#144-rarefy-to-even-depth)
+  - [1.5-Add sample metadata](#15-add-sample-metadata)
+- [2-Beta diversity and 16S counts: **Figure
+  1A**](#2-beta-diversity-and-16s-counts-figure-1a)
+  - [2.1-Test group differences (**Supplementary
+    Information**)](#21-test-group-differences-supplementary-information)
+    - [2.1.1-DNA](#211-dna)
+    - [2.1.2-cDNA](#212-cdna)
+  - [2.2-Ordination (**Figure 1A**)](#22-ordination-figure-1a)
+    - [2.2.1-Rarefaction of a combined DNA/cDNA dataset to compare beta
+      diversity](#221-rarefaction-of-a-combined-dnacdna-dataset-to-compare-beta-diversity)
+    - [2.2.2-16S rRNA gene quantification with qPCR
+      data](#222-16s-rrna-gene-quantification-with-qpcr-data)
+    - [2.2.3-PCA: **Figure 1A**](#223-pca-figure-1a)
+  - [2.3-16S rRNA gene count statistics (**Supplementary
+    Information**)](#23-16s-rrna-gene-count-statistics-supplementary-information)
+- [3-Alpha diversity: **Figure 1B**](#3-alpha-diversity-figure-1b)
+  - [3.1-Compute alpha diversity for both
+    datasets](#31-compute-alpha-diversity-for-both-datasets)
+  - [3.2-Test for group differences in alpha
+    diversity](#32-test-for-group-differences-in-alpha-diversity)
+  - [3.3-Plot alpha diversity (**Figure
+    1B**)](#33-plot-alpha-diversity-figure-1b)
+- [4-Taxonomic composition: **Figure
+  1C**](#4-taxonomic-composition-figure-1c)
+  - [4.1-Transform sample counts](#41-transform-sample-counts)
+  - [4.2-Taxonomy color dataframe](#42-taxonomy-color-dataframe)
+  - [4.3-Taxonomy barplot (**Figure
+    1C**)](#43-taxonomy-barplot-figure-1c)
+  - [4.4-Chloroplast reads (**Figure
+    1C**)](#44-chloroplast-reads-figure-1c)
+  - [4.5-Cyanobacterial abundance (**Supplementary
+    Information**)](#45-cyanobacterial-abundance-supplementary-information)
+  - [4.6-Abundance of *Sulfurimonas* and *Thiomicrorhabdus* dominant
+    ASVs](#46-abundance-of-sulfurimonas-and-thiomicrorhabdus-dominant-asvs)
+  - [4.7-ANME-SRB correlations: **Supplementary
+    Information**](#47-anme-srb-correlations-supplementary-information)
+    - [4.7.1.-Plot ANME and SEEP-SRB1
+      abundances](#471-plot-anme-and-seep-srb1-abundances)
+    - [4.7.2.-DNA](#472-dna)
+    - [4.7.2.-cDNA](#472-cdna)
+  - [4.8-DNA/cDNA discrepancy for SR/SO: **Supplementary
+    Information**](#48-dnacdna-discrepancy-for-srso-supplementary-information)
 
 # Documentation
 
 This script aims at reproducing figures and analyses published in the
-manuscript “Anoxic water-ice interfaces of an emerged cold seep host
-chemoautotrophic microorganisms” \<\>. It takes as input the published
-ASV table \<\>, output from the DADA2 pipeline.
+manuscript “Chemolithoautotrophic bacteria flourish at dark water-ice
+interfaces of an emerged Arctic cold seep” \<\>. It takes as input the
+published ASV table \<\>, output from the DADA2 pipeline. Alternatively,
+the DADA2 pipeline is given, and the raw sequences cam be downloaded
+from the NCBI SRA database, accession numbers SRR24977479-SRR24977560.
 
 Section 0 provides internal functions run in the script with their
 documentation. The first section wrangles data, removing contaminant
@@ -116,7 +83,7 @@ the manuscript (beta diversity), the third section reproduces **Figure
 composition and reproduces **Figure 1C**. Numbers presented in the Brief
 Report and its **Supplementary Information** are also given.
 
-Built with R 4.2.2.
+Built with R 4.4.1.
 
 # 0-Source functions
 
@@ -135,7 +102,7 @@ require(multcompView)
 
 ## 0.2-Internal functions
 
-If using those functions, please cite \<\>…
+If using those functions, please cite \<\>.
 
 The `parseAmplicon` function takes as input the path to the main file
 created by the pipeline presented below in section 1.1, the ASV table
@@ -421,7 +388,7 @@ module load QIIME2/2021.8
 
 
 # Database for taxonomy
-REFDIR=path/to/Silva/Databases/Silva_138/silva.nr_v138_1.align # Downloaded from https://mothur.org/blog/2021/SILVA-v138_1-reference-files/
+REFDIR=/path/to/Silva/Databases/Silva_138/silva.nr_v138_1.align # Downloaded from https://mothur.org/blog/2021/SILVA-v138_1-reference-files/
 TAXDIR=/path/to/Silva/Databases/Silva_138/silva.nr_v138_1.tax 
 
 
@@ -619,20 +586,20 @@ dada2.stats %>%
     ## # Groups:   Dataset [2]
     ##    Dataset Step                              Mean_percentage_per_sample
     ##    <chr>   <fct>                                                  <dbl>
-    ##  1 cDNA    percentage.of.input.passed.filter                     77.2  
-    ##  2 cDNA    percentage.denoised                                   73.9  
-    ##  3 cDNA    percentage.of.input.merged                            64.6  
-    ##  4 cDNA    percentage.of.input.non.chimeric                      54.6  
-    ##  5 cDNA    percentage.removed.lineages                           54.5  
-    ##  6 cDNA    percentage.mtch.chl                                   54.0  
-    ##  7 cDNA    percentage.mtch.chl.vs.dada2                           0.886
-    ##  8 DNA     percentage.of.input.passed.filter                     78.4  
-    ##  9 DNA     percentage.denoised                                   76.8  
-    ## 10 DNA     percentage.of.input.merged                            70.7  
-    ## 11 DNA     percentage.of.input.non.chimeric                      67.1  
-    ## 12 DNA     percentage.removed.lineages                           66.2  
-    ## 13 DNA     percentage.mtch.chl                                   65.6  
-    ## 14 DNA     percentage.mtch.chl.vs.dada2                           2.26
+    ##  1 DNA     percentage.of.input.passed.filter                     78.4  
+    ##  2 DNA     percentage.denoised                                   76.8  
+    ##  3 DNA     percentage.of.input.merged                            70.7  
+    ##  4 DNA     percentage.of.input.non.chimeric                      67.1  
+    ##  5 DNA     percentage.removed.lineages                           66.2  
+    ##  6 DNA     percentage.mtch.chl                                   65.6  
+    ##  7 DNA     percentage.mtch.chl.vs.dada2                           2.26 
+    ##  8 cDNA    percentage.of.input.passed.filter                     77.2  
+    ##  9 cDNA    percentage.denoised                                   73.9  
+    ## 10 cDNA    percentage.of.input.merged                            64.6  
+    ## 11 cDNA    percentage.of.input.non.chimeric                      54.6  
+    ## 12 cDNA    percentage.removed.lineages                           54.5  
+    ## 13 cDNA    percentage.mtch.chl                                   54.0  
+    ## 14 cDNA    percentage.mtch.chl.vs.dada2                           0.886
 
 ## 1.3-Data wrangling
 
@@ -931,13 +898,10 @@ plotRarecurves(ASV.cDNA, label = TRUE) +
 
     ## Warning in rarefy(df[, i], sample = x): most observed count data have counts 1,
     ## but smallest count is 2
-
     ## Warning in rarefy(df[, i], sample = x): most observed count data have counts 1,
     ## but smallest count is 2
-
     ## Warning in rarefy(df[, i], sample = x): most observed count data have counts 1,
     ## but smallest count is 2
-
     ## Warning in rarefy(df[, i], sample = x): most observed count data have counts 1,
     ## but smallest count is 2
 
@@ -1065,13 +1029,10 @@ plotRarecurves(ASV.cDNA,label = FALSE) +
 
     ## Warning in rarefy(df[, i], sample = x): most observed count data have counts 1,
     ## but smallest count is 2
-
     ## Warning in rarefy(df[, i], sample = x): most observed count data have counts 1,
     ## but smallest count is 2
-
     ## Warning in rarefy(df[, i], sample = x): most observed count data have counts 1,
     ## but smallest count is 2
-
     ## Warning in rarefy(df[, i], sample = x): most observed count data have counts 1,
     ## but smallest count is 2
 
@@ -1174,7 +1135,9 @@ ANOSIM).
 permanova.dna <- adonis(t(asv) ~ as.data.frame(sample_data(LP.ICE.DNA.rar))$WinterGroup)
 ```
 
-    ## 'adonis' will be deprecated: use 'adonis2' instead
+    ## Warning in adonis(t(asv) ~ as.data.frame(sample_data(LP.ICE.DNA.rar))$WinterGroup): 'adonis' is deprecated.
+    ## Use 'adonis2' instead.
+    ## See help("Deprecated") and help("vegan-deprecated").
 
 ``` r
 permanova.dna$aov.tab
@@ -1253,7 +1216,9 @@ betadisper(bray.cdna, group = LP.ICE.cDNA.rar %>% sample_data() %>% as.data.fram
 permanova.cdna <- adonis(t(asv.cdna) ~ as.data.frame(sample_data(LP.ICE.cDNA.rar))$WinterGroup)
 ```
 
-    ## 'adonis' will be deprecated: use 'adonis2' instead
+    ## Warning in adonis(t(asv.cdna) ~ as.data.frame(sample_data(LP.ICE.cDNA.rar))$WinterGroup): 'adonis' is deprecated.
+    ## Use 'adonis2' instead.
+    ## See help("Deprecated") and help("vegan-deprecated").
 
 ``` r
 permanova.cdna$aov.tab
@@ -1404,7 +1369,7 @@ LP.ICE.DNA.cDNA.rar <- rarefy_even_depth(LP.ICE.DNA.cDNA, 24241, rngseed = 1998,
 
     ## ...
 
-### 2.2.2-16S DNA quantification with qPCR data
+### 2.2.2-16S rRNA gene quantification with qPCR data
 
 ``` r
 # Adding qPCR information onto the ordination
@@ -1421,7 +1386,7 @@ qPCR.triplicates <- qPCR %>%
   full_join(qPCR)
 ```
 
-    ## Joining, by = c("Sample", "CopyNb")
+    ## Joining with `by = join_by(Sample, CopyNb)`
 
 ``` r
 qPCR.mean <- qPCR.triplicates %>% 
@@ -1432,9 +1397,9 @@ qPCR.mean <- qPCR.triplicates %>%
 sample_data(LP.ICE.DNA.cDNA.rar) <- sample_data(LP.ICE.DNA.cDNA.rar) %>% data.frame() %>% rownames_to_column(var = "Sample") %>% left_join(qPCR.mean) %>% column_to_rownames(var = "Sample")
 ```
 
-    ## Joining, by = "Sample"
+    ## Joining with `by = join_by(Sample)`
 
-### 2.2.3-PCA Figure 1A
+### 2.2.3-PCA: **Figure 1A**
 
 ``` r
 lp.ice.merged.hell <- decostand(LP.ICE.DNA.cDNA.rar %>% otu_table() %>% t(), method = "hellinger")
@@ -1539,7 +1504,7 @@ ggPCA(pca.lp.ice.merged,
 ```
 
 ![](BriefReport_Reproducible_code_files/figure-gfm/PCA-3.png)<!-- -->
-PC1 represents 30.6% of total variance, PC2 represents 19.1% of total
+PC1 represents 30.6% of total variance, PC2 represents 19.2% of total
 variation. The third discriminates DNA and cDNA datasets for the ice
 core group.
 
@@ -1561,16 +1526,16 @@ df.pca <- df.pca %>% bind_cols(sample_data(LP.ICE.DNA.cDNA.rar) %>% data.frame()
                  shape = Dataset,
                  size = Mean_CopyNb),
              alpha = 0.8) +
-  scale_color_manual(values = pal_npg()(4)[c(3,2,1,4)], label = c("Snow","Ice core","Bottom core","Winter water")) +
+  scale_color_manual(values = pal_npg()(4)[c(3,2,1,4)], label = c("Snow","Ice core","Bottom core","Water")) +
   scale_shape_manual(values = c(17,16)) +
   scale_size_continuous(range = c(3,9), breaks = c(1e+03,1e+04,1e+05,2e+05,3e+05)) +
   geom_hline(yintercept=0, linetype="dotted") +
   geom_vline(xintercept=0, linetype="dotted") +
   ylim(c(-0.45,0.8)) +
   labs(x = "PC1 (30.6%)",
-       y = "PC2 (19.1%)",
+       y = "PC2 (19.2%)",
        shape = "", col = "",
-       size = "Mean 16S DNA \ncopy number \n(copy/mL sample)") +
+       size = "Mean 16S rRNA gene \nconcentration \n(copy/mL sample)") +
   theme_linedraw() +
   theme(panel.grid = element_blank(),
         legend.background = element_blank(),
@@ -1587,7 +1552,11 @@ df.pca <- df.pca %>% bind_cols(sample_data(LP.ICE.DNA.cDNA.rar) %>% data.frame()
 
 ![](BriefReport_Reproducible_code_files/figure-gfm/Figure%201A%20Ordination%20with%20qPCR-1.png)<!-- -->
 
-## 2.3-16S count statistics (**Supplementary Information**)
+``` r
+ggsave("~/Desktop/Figure1A.pdf", plot.PCA.winter + theme(legend.position = "none"), width = 5, height = 5)
+```
+
+## 2.3-16S rRNA gene count statistics (**Supplementary Information**)
 
 ``` r
 # Recode the Depth profile
@@ -1628,7 +1597,8 @@ qPCR %>%
   mutate(WinterGroup = case_when(!Depth %in% c("80-90","90-100","100-110","Snow","Water") ~ "80 first cm",
                                  Depth2 == "0-10" ~ "10 last cm",
                                  TRUE ~ as.character(Environment))) %>% 
-  mutate(WinterGroup = case_when(WinterGroup == "Ice core" ~ as.character(Sample))) %>% 
+  mutate(WinterGroup = case_when(WinterGroup == "Ice core" ~ as.character(Sample),
+                                 TRUE ~ as.character(WinterGroup))) %>% 
   group_by(WinterGroup, Environment) %>% 
   summarize(Mean = mean(CopyNb),
             SD = sd(CopyNb))
@@ -1637,17 +1607,69 @@ qPCR %>%
     ## `summarise()` has grouped output by 'WinterGroup'. You can override using the
     ## `.groups` argument.
 
-    ## # A tibble: 7 × 4
-    ## # Groups:   WinterGroup [5]
-    ##   WinterGroup            Environment   Mean     SD
-    ##   <chr>                  <fct>        <dbl>  <dbl>
-    ## 1 LP_ICE_21_Core1_80-90  Ice core    20286.  5324.
-    ## 2 LP_ICE_21_Core2_80-90  Ice core     6091.   207.
-    ## 3 LP_ICE_21_Core2_90-100 Ice core    51278. 13549.
-    ## 4 LP_ICE_21_Core3_80-90  Ice core    23754.   397.
-    ## 5 <NA>                   Ice core    30316. 85430.
-    ## 6 <NA>                   Snow        12312.  8005.
-    ## 7 <NA>                   Water       93169. 29001.
+    ## # A tibble: 8 × 4
+    ## # Groups:   WinterGroup [8]
+    ##   WinterGroup            Environment    Mean     SD
+    ##   <chr>                  <fct>         <dbl>  <dbl>
+    ## 1 10 last cm             Ice core    253663. 98978.
+    ## 2 80 first cm            Ice core      2398.  2399.
+    ## 3 LP_ICE_21_Core1_80-90  Ice core     20286.  5324.
+    ## 4 LP_ICE_21_Core2_80-90  Ice core      6091.   207.
+    ## 5 LP_ICE_21_Core2_90-100 Ice core     51278. 13549.
+    ## 6 LP_ICE_21_Core3_80-90  Ice core     23754.   397.
+    ## 7 Snow                   Snow         12312.  8005.
+    ## 8 Water                  Water        93169. 29001.
+
+``` r
+qPCR %>% 
+  mutate(Log_CopyNb = log10(CopyNb)) %>% 
+  group_by(Feature, Depth, Depth2, Environment) %>%
+  summarize(Mean_log = mean(Log_CopyNb),
+            SD_log = sd(Log_CopyNb)) %>% 
+  mutate(Sample = paste(Feature,Depth,sep="_")) %>% 
+  ggplot(aes(x = Sample, y = Mean_log, fill = Feature)) +
+  geom_col(stat = 'identity',
+           position = position_dodge2(preserve = 'single'),
+           colour = "transparent",
+           size = 0.2,
+           alpha = 0.85,
+           width = .95) +
+  geom_errorbar(aes(ymin = Mean_log-SD_log, ymax = Mean_log+SD_log),
+                position = position_dodge2(preserve = 'single'),
+                width = .5) +
+  scale_fill_manual(values = c("#3c5488ff","#f39b7fff","#8491b4ff",rep("grey80",7), rep("grey50",3))) + 
+  facet_grid(cols = vars(Depth2), scales = "free") +
+  geom_blank(data = data.frame(Sample = c("Core1_blank","Core3_blank"),
+                        Mean_log = c(0,0),
+                        Feature = c("Core1","Core3"),
+                        Depth2 = c("100-110","100-110")) %>% 
+               mutate(Depth2 = factor(Depth2, levels = levels(qPCR$Depth2)))) +
+  theme_bw() +
+  theme(panel.grid.major.x = element_blank(),
+        axis.ticks = element_blank(),
+        panel.border = element_blank(),
+        strip.background = element_blank(),
+        panel.spacing = unit(.3,"line")) +
+  labs(fill = "", x = "", y = "Mean of log(16S rRNA gene/mL)")
+```
+
+    ## `summarise()` has grouped output by 'Feature', 'Depth', 'Depth2'. You can
+    ## override using the `.groups` argument.
+
+    ## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+    ## ℹ Please use `linewidth` instead.
+    ## This warning is displayed once every 8 hours.
+    ## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+    ## generated.
+
+    ## Warning in geom_col(stat = "identity", position = position_dodge2(preserve =
+    ## "single"), : Ignoring unknown parameters: `stat`
+
+![](BriefReport_Reproducible_code_files/figure-gfm/Supplementary%20Figure%203-1.png)<!-- -->
+
+``` r
+ggsave("~/Desktop/SupplementaryFigure3.pdf", width = 5.5, height = 3.5)
+```
 
 # 3-Alpha diversity: **Figure 1B**
 
@@ -1684,8 +1706,8 @@ shannon.ice <- alpha.cdna %>%
   filter(AlphaMeasure == "Shannon")
 ```
 
-    ## Joining, by = c("Feature", "Environment", "Depth", "WinterGroup",
-    ## "WinterGroupCol", "EnvSeason", "AlphaMeasure", "AlphaValue", "Dataset")
+    ## Joining with `by = join_by(Feature, Environment, Depth, WinterGroup,
+    ## WinterGroupCol, EnvSeason, AlphaMeasure, AlphaValue, Dataset)`
 
 ``` r
 (plot.shannon.ice <- ggplot(shannon.ice,
@@ -1697,7 +1719,7 @@ shannon.ice <- alpha.cdna %>%
   facet_wrap(.~ Dataset, scales = "free", dir = "v") +
   coord_flip() +
   scale_x_discrete(limits = rev(c("Snow","Ice_core","Bottom_core","Water")), 
-                   labels = c("Winter water","Bottom core","Ice core","Snow")) +
+                   labels = c("Water","Bottom core","Ice core","Snow")) +
   theme_bw() +
   theme(axis.title = element_blank(),
         legend.title = element_blank(),
@@ -1706,6 +1728,34 @@ shannon.ice <- alpha.cdna %>%
 ```
 
 ![](BriefReport_Reproducible_code_files/figure-gfm/Compute%20alpha%20diversity-1.png)<!-- -->
+
+``` r
+# Plot other indices
+plotIndex <- function(index){
+  index.df <- alpha.cdna %>% 
+    mutate(Dataset = "cDNA") %>% 
+    full_join(alpha.dna %>% mutate(Dataset = "DNA")) %>% 
+    filter(AlphaMeasure == index)
+  
+  plot.index <- ggplot(index.df,
+                       aes(x = WinterGroup, y = AlphaValue, fill = WinterGroup)) +
+    geom_boxplot(alpha = 0.7, size = 0.2) +
+    geom_jitter(position = position_jitterdodge(jitter.width = 0.3),
+                size = 1) +
+    scale_fill_manual(values = pal_npg()(9)[c(3,2,1,4)]) +
+    facet_wrap(.~ Dataset, scales = "free", dir = "v") +
+    coord_flip() +
+    scale_x_discrete(limits = rev(c("Snow","Ice_core","Bottom_core","Water")), 
+                     labels = c("Water","Bottom core","Ice core","Snow")) +
+    theme_bw() +
+    theme(axis.title = element_blank(),
+          legend.title = element_blank(),
+          panel.grid = element_blank(),
+          axis.ticks.y = element_blank())
+  
+  return(plot.index)
+}
+```
 
 ## 3.2-Test for group differences in alpha diversity
 
@@ -1722,8 +1772,8 @@ shannon.ice %>%
     ##   WinterGroup Dataset     p.value statistic
     ##   <fct>       <chr>         <dbl>     <dbl>
     ## 1 Ice_core    cDNA    0.000000183     0.534
-    ## 2 Water       cDNA    0.0220          0.760
-    ## 3 Water       DNA     0.0466          0.771
+    ## 2 Water       DNA     0.0466          0.771
+    ## 3 Water       cDNA    0.0220          0.760
 
 ``` r
 shannon.ice %>%
@@ -1735,8 +1785,8 @@ shannon.ice %>%
     ## # Groups:   Dataset [2]
     ##   Dataset  p.value statistic parameter
     ##   <chr>      <dbl>     <dbl>     <int>
-    ## 1 cDNA    0.000340      18.5         3
-    ## 2 DNA     0.000367      18.4         3
+    ## 1 DNA     0.000367      18.4         3
+    ## 2 cDNA    0.000340      18.5         3
 
 ``` r
 (shannon.ice.dunn <- shannon.ice %>%
@@ -1744,28 +1794,6 @@ shannon.ice %>%
   group_modify(~ modified_dunn_test(.x$AlphaValue,.x$WinterGroup, method="bh")))
 ```
 
-    ##   Kruskal-Wallis rank sum test
-    ## 
-    ## data: x and g
-    ## Kruskal-Wallis chi-squared = 18.5434, df = 3, p-value = 0
-    ## 
-    ## 
-    ##                              Comparison of x by g                              
-    ##                              (Benjamini-Hochberg)                              
-    ## Col Mean-|
-    ## Row Mean |   Bottom_c   Ice_core       Snow
-    ## ---------+---------------------------------
-    ## Ice_core |  -3.557307
-    ##          |    0.0006*
-    ##          |
-    ##     Snow |  -3.559910  -0.873294
-    ##          |    0.0011*     0.2295
-    ##          |
-    ##    Water |  -0.632511   2.106996   2.395269
-    ##          |     0.2635     0.0263    0.0166*
-    ## 
-    ## alpha = 0.05
-    ## Reject Ho if p <= alpha/2
     ##   Kruskal-Wallis rank sum test
     ## 
     ## data: x and g
@@ -1788,23 +1816,45 @@ shannon.ice %>%
     ## 
     ## alpha = 0.05
     ## Reject Ho if p <= alpha/2
+    ##   Kruskal-Wallis rank sum test
+    ## 
+    ## data: x and g
+    ## Kruskal-Wallis chi-squared = 18.5434, df = 3, p-value = 0
+    ## 
+    ## 
+    ##                              Comparison of x by g                              
+    ##                              (Benjamini-Hochberg)                              
+    ## Col Mean-|
+    ## Row Mean |   Bottom_c   Ice_core       Snow
+    ## ---------+---------------------------------
+    ## Ice_core |  -3.557307
+    ##          |    0.0006*
+    ##          |
+    ##     Snow |  -3.559910  -0.873294
+    ##          |    0.0011*     0.2295
+    ##          |
+    ##    Water |  -0.632511   2.106996   2.395269
+    ##          |     0.2635     0.0263    0.0166*
+    ## 
+    ## alpha = 0.05
+    ## Reject Ho if p <= alpha/2
 
     ## # A tibble: 12 × 3
     ## # Groups:   Dataset [2]
     ##    Dataset adjusted.p.value comparison            
     ##    <chr>              <dbl> <chr>                 
-    ##  1 cDNA            0.000562 Bottom_core - Ice_core
-    ##  2 cDNA            0.00111  Bottom_core - Snow    
-    ##  3 cDNA            0.230    Ice_core - Snow       
-    ##  4 cDNA            0.264    Bottom_core - Water   
-    ##  5 cDNA            0.0263   Ice_core - Water      
-    ##  6 cDNA            0.0166   Snow - Water          
-    ##  7 DNA             0.000989 Bottom_core - Ice_core
-    ##  8 DNA             0.000233 Bottom_core - Snow    
-    ##  9 DNA             0.0760   Ice_core - Snow       
-    ## 10 DNA             0.161    Bottom_core - Water   
-    ## 11 DNA             0.0925   Ice_core - Water      
-    ## 12 DNA             0.0212   Snow - Water
+    ##  1 DNA             0.000989 Bottom_core - Ice_core
+    ##  2 DNA             0.000233 Bottom_core - Snow    
+    ##  3 DNA             0.0760   Ice_core - Snow       
+    ##  4 DNA             0.161    Bottom_core - Water   
+    ##  5 DNA             0.0925   Ice_core - Water      
+    ##  6 DNA             0.0212   Snow - Water          
+    ##  7 cDNA            0.000562 Bottom_core - Ice_core
+    ##  8 cDNA            0.00111  Bottom_core - Snow    
+    ##  9 cDNA            0.230    Ice_core - Snow       
+    ## 10 cDNA            0.264    Bottom_core - Water   
+    ## 11 cDNA            0.0263   Ice_core - Water      
+    ## 12 cDNA            0.0166   Snow - Water
 
 ``` r
 # Check with MW test for bottom ice vs water samples
@@ -1884,7 +1934,7 @@ Shannon_Letters_cDNA <- shannon.ice %>%
   full_join(Shannon_Letters_cDNA)
 ```
 
-    ## Joining, by = "WinterGroup"
+    ## Joining with `by = join_by(WinterGroup)`
 
 ``` r
 x = shannon.ice.dunn %>% filter(Dataset == "DNA") %>% pull(adjusted.p.value)
@@ -1905,7 +1955,7 @@ Shannon_Letters_DNA <- shannon.ice %>%
   full_join(Shannon_Letters_DNA)
 ```
 
-    ## Joining, by = "WinterGroup"
+    ## Joining with `by = join_by(WinterGroup)`
 
 ``` r
 dummy <- data.frame(WinterGroup = factor(rep(c("Snow","Ice_core","Bottom_core","Water"),2)), Dataset = factor(c(rep("cDNA",4),rep("DNA",4)))) %>% 
@@ -1919,12 +1969,196 @@ dummy <- data.frame(WinterGroup = factor(rep(c("Snow","Ice_core","Bottom_core","
             size = 4) +
   geom_blank(data = dummy) +
   # scale_x_continuous(limits = c(NA,2500)) +
-  theme(axis.text.y= element_text(size = 9)))
+  theme(axis.text.y= element_text(size = 9),
+        axis.ticks.x = element_line(linewidth = .2),
+        legend.position = "none"))
 ```
 
-    ## Joining, by = c("WinterGroup", "Placement", "Letters", "Dataset")
+    ## Joining with `by = join_by(WinterGroup, Placement, Letters, Dataset)`
 
 ![](BriefReport_Reproducible_code_files/figure-gfm/Plot%20alpha%20diversity%20with%20statistical%20outputs-1.png)<!-- -->
+
+``` r
+ggsave("~/Desktop/Figure1B_Revised.pdf", width = 3.2, height = 2.8)
+```
+
+``` r
+observed.ice <- alpha.cdna %>% 
+  mutate(Dataset = "cDNA") %>% 
+  full_join(alpha.dna %>% mutate(Dataset = "DNA")) %>% 
+  filter(AlphaMeasure == "Observed")
+```
+
+    ## Joining with `by = join_by(Feature, Environment, Depth, WinterGroup,
+    ## WinterGroupCol, EnvSeason, AlphaMeasure, AlphaValue, Dataset)`
+
+``` r
+observed.ice %>%
+  group_by(Dataset) %>%
+  group_modify(~ modified_KW_test(.x$AlphaValue,.x$WinterGroup)) # Test is significant for both datasets for observed index
+```
+
+    ## # A tibble: 2 × 4
+    ## # Groups:   Dataset [2]
+    ##   Dataset   p.value statistic parameter
+    ##   <chr>       <dbl>     <dbl>     <int>
+    ## 1 DNA     0.0000563      22.3         3
+    ## 2 cDNA    0.000184       19.8         3
+
+``` r
+(observed.ice.dunn <- observed.ice %>%
+  group_by(Dataset) %>%
+  group_modify(~ modified_dunn_test(.x$AlphaValue,.x$WinterGroup, method="bh")))
+```
+
+    ##   Kruskal-Wallis rank sum test
+    ## 
+    ## data: x and g
+    ## Kruskal-Wallis chi-squared = 22.3088, df = 3, p-value = 0
+    ## 
+    ## 
+    ##                              Comparison of x by g                              
+    ##                              (Benjamini-Hochberg)                              
+    ## Col Mean-|
+    ## Row Mean |   Bottom_c   Ice_core       Snow
+    ## ---------+---------------------------------
+    ## Ice_core |  -2.831948
+    ##          |    0.0046*
+    ##          |
+    ##     Snow |  -4.672310  -3.177230
+    ##          |    0.0000*    0.0022*
+    ##          |
+    ##    Water |  -1.718497   0.209756   2.145900
+    ##          |     0.0514     0.4169    0.0239*
+    ## 
+    ## alpha = 0.05
+    ## Reject Ho if p <= alpha/2
+    ##   Kruskal-Wallis rank sum test
+    ## 
+    ## data: x and g
+    ## Kruskal-Wallis chi-squared = 19.8328, df = 3, p-value = 0
+    ## 
+    ## 
+    ##                              Comparison of x by g                              
+    ##                              (Benjamini-Hochberg)                              
+    ## Col Mean-|
+    ## Row Mean |   Bottom_c   Ice_core       Snow
+    ## ---------+---------------------------------
+    ## Ice_core |  -3.257938
+    ##          |    0.0017*
+    ##          |
+    ##     Snow |  -3.977163  -1.746692
+    ##          |    0.0002*     0.0484
+    ##          |
+    ##    Water |  -0.556643   1.956612   2.830940
+    ##          |     0.2889     0.0378    0.0046*
+    ## 
+    ## alpha = 0.05
+    ## Reject Ho if p <= alpha/2
+
+    ## # A tibble: 12 × 3
+    ## # Groups:   Dataset [2]
+    ##    Dataset adjusted.p.value comparison            
+    ##    <chr>              <dbl> <chr>                 
+    ##  1 DNA           0.00463    Bottom_core - Ice_core
+    ##  2 DNA           0.00000893 Bottom_core - Snow    
+    ##  3 DNA           0.00223    Ice_core - Snow       
+    ##  4 DNA           0.0514     Bottom_core - Water   
+    ##  5 DNA           0.417      Ice_core - Water      
+    ##  6 DNA           0.0239     Snow - Water          
+    ##  7 cDNA          0.00168    Bottom_core - Ice_core
+    ##  8 cDNA          0.000209   Bottom_core - Snow    
+    ##  9 cDNA          0.0484     Ice_core - Snow       
+    ## 10 cDNA          0.289      Bottom_core - Water   
+    ## 11 cDNA          0.0378     Ice_core - Water      
+    ## 12 cDNA          0.00464    Snow - Water
+
+``` r
+(plot.observed.ice <- ggplot(observed.ice,
+       aes(x = WinterGroup, y = AlphaValue, fill = WinterGroup)) +
+  geom_boxplot(alpha = 0.7, size = 0.2) +
+  geom_jitter(position = position_jitterdodge(jitter.width = 0.3),
+              size = 1) +
+  scale_fill_manual(values = pal_npg()(9)[c(3,2,1,4)]) +
+  facet_wrap(.~ Dataset, scales = "free", dir = "v") +
+  coord_flip() +
+  scale_x_discrete(limits = rev(c("Snow","Ice_core","Bottom_core","Water")), 
+                   labels = c("Water","Bottom core","Ice core","Snow")) +
+  theme_bw() +
+  theme(axis.title = element_blank(),
+        legend.title = element_blank(),
+        panel.grid = element_blank(),
+        axis.ticks.y = element_blank()))
+```
+
+![](BriefReport_Reproducible_code_files/figure-gfm/Supplementary%20Figure%204-1.png)<!-- -->
+
+``` r
+x = observed.ice.dunn %>% filter(Dataset == "cDNA") %>% pull(adjusted.p.value)
+names(x) = observed.ice.dunn %>% filter(Dataset == "cDNA") %>% pull(comparison) %>% str_replace(., " - ", "-")
+
+Observed_Letters_cDNA <- multcompLetters2(AlphaValue ~ WinterGroup, x, observed.ice %>% 
+                                      filter(Dataset == "cDNA"))$Letters %>% 
+  data.frame() %>%
+  rename(Letters=".") %>%
+  rownames_to_column(var = "WinterGroup") %>% 
+  mutate(Dataset = factor("cDNA"),
+         WinterGroup = factor(WinterGroup, c("Snow","Ice_core","Bottom_core","Water")))
+
+Observed_Letters_cDNA <- observed.ice %>%
+  filter(Dataset == "cDNA") %>% 
+  group_by(WinterGroup) %>%
+  summarize(Placement = max(AlphaValue)) %>% 
+  full_join(Observed_Letters_cDNA)
+```
+
+    ## Joining with `by = join_by(WinterGroup)`
+
+``` r
+x = observed.ice.dunn %>% filter(Dataset == "DNA") %>% pull(adjusted.p.value)
+names(x) = observed.ice.dunn %>% filter(Dataset == "DNA") %>% pull(comparison) %>% str_replace(., " - ", "-")
+
+Observed_Letters_DNA <- multcompLetters2(AlphaValue ~ WinterGroup, x, observed.ice %>% 
+                                      filter(Dataset == "DNA"))$Letters %>% 
+  data.frame() %>%
+  rename(Letters=".") %>%
+  rownames_to_column(var = "WinterGroup") %>% 
+  mutate(Dataset = factor("DNA"),
+         WinterGroup = factor(WinterGroup, c("Snow","Ice_core","Bottom_core","Water")))
+
+Observed_Letters_DNA <- observed.ice %>%
+  filter(Dataset == "DNA") %>% 
+  group_by(WinterGroup) %>%
+  summarize(Placement = max(AlphaValue)) %>% 
+  full_join(Observed_Letters_DNA)
+```
+
+    ## Joining with `by = join_by(WinterGroup)`
+
+``` r
+dummy <- data.frame(WinterGroup = factor(rep(c("Snow","Ice_core","Bottom_core","Water"),2)), Dataset = factor(c(rep("cDNA",4),rep("DNA",4)))) %>% 
+  mutate(AlphaValue = rep(2150,8)) # To make room for letters on the plot
+
+(plot.Alpha.ice.sign <- plot.observed.ice + # Paper plot Supplementary Figure 4
+  geom_text(data = full_join(Observed_Letters_cDNA, Observed_Letters_DNA),
+            aes(label = Letters,
+                x = WinterGroup, y = Placement),
+            hjust = -1, vjust = 0.5,
+            size = 4) +
+  geom_blank(data = dummy) +
+  # scale_x_continuous(limits = c(NA,2500)) +
+  theme(axis.text.y= element_text(size = 9),
+        axis.ticks.x = element_line(linewidth = .2),
+        legend.position = "none"))
+```
+
+    ## Joining with `by = join_by(WinterGroup, Placement, Letters, Dataset)`
+
+![](BriefReport_Reproducible_code_files/figure-gfm/Supplementary%20Figure%204-2.png)<!-- -->
+
+``` r
+ggsave("~/Desktop/SupplementaryFigure4_Revised.pdf", width = 3.2, height = 2.8)
+```
 
 # 4-Taxonomic composition: **Figure 1C**
 
@@ -2308,7 +2542,8 @@ chloro %>%
     ## Warning in geom_blank(data = dummy_cdna, aes(x = SampleName2, y = 1), color =
     ## "black"): Ignoring unknown parameters: `colour`
 
-    ## Warning: Removed 30 rows containing missing values (`geom_text()`).
+    ## Warning: Removed 30 rows containing missing values or values outside the scale range
+    ## (`geom_text()`).
 
 ![](BriefReport_Reproducible_code_files/figure-gfm/Add%20choloroplast%20read%20on%20paper%20plot-1.png)<!-- -->
 
@@ -2376,15 +2611,146 @@ chloro %>%
     ## Warning in geom_blank(data = dummy_cdna, aes(x = SampleName2, y = 1), color =
     ## "black"): Ignoring unknown parameters: `colour`
 
-    ## Warning: Removed 26 rows containing missing values (`geom_text()`).
+    ## Warning: Removed 26 rows containing missing values or values outside the scale range
+    ## (`geom_text()`).
 
 ![](BriefReport_Reproducible_code_files/figure-gfm/Add%20choloroplast%20read%20on%20paper%20plot-2.png)<!-- -->
 
-## 4.5-Abundance of *Sulfurimonas* and *Thiomicrorhabdus* dominant ASVs
+## 4.5-Cyanobacterial abundance (**Supplementary Information**)
 
-Depends on the definition of the bottom core. We now define the bottom
-core as the ice core samples where the genus *Sulfurimonas* becomes
-dominant.
+``` r
+subset_samples(LP.ICE.cDNA.rar, WinterGroup != "Snow") %>% 
+  searchTaxa(., "Cyanobacteria", "Phylum") %>% 
+  rownames() %>% 
+  unique() %>% 
+  subsetPhyseq(subset_samples(LP.ICE.cDNA.rar, WinterGroup != "Snow"),.) %>% 
+  plotAbundance(., n=nrow(otu_table(.)), other = FALSE, rank = Phylum, plot = TRUE, taxonomyCol = data.frame(Color = "grey", row.names = "Cyanobacteria")) # , taxonomyCol = taxonomy.cyanoCol
+```
+
+![](BriefReport_Reproducible_code_files/figure-gfm/Cyanobacteria%20abundances-1.png)<!-- -->
+
+``` r
+cyano <- subset_samples(LP.ICE.DNA.rar, WinterGroup != "Snow") %>% 
+  searchTaxa(., "Cyanobacteria", "Phylum") %>% 
+  rownames() %>%
+  unique() %>% 
+  subsetPhyseq(subset_samples(LP.ICE.DNA.rar, WinterGroup != "Snow"),.)
+cyano.cDNA <- subset_samples(LP.ICE.cDNA.rar, WinterGroup != "Snow") %>% 
+  searchTaxa(., "Cyanobacteria", "Phylum") %>% 
+  rownames() %>%
+  unique() %>% 
+  subsetPhyseq(subset_samples(LP.ICE.cDNA.rar, WinterGroup != "Snow"),.)
+
+taxonomy.cyanoCol <- c(tax_table(cyano) %>% data.frame() %>% pull(Genus),
+                       tax_table(cyano.cDNA) %>% data.frame() %>% pull(Genus)) %>% 
+  unique() %>% 
+  data.frame(Taxa = .) %>%
+  mutate(Color = "#D3D3D3") %>%
+  column_to_rownames(var = "Taxa")
+taxonomy.cyanoCol[c("Aliterella","Calothrix_PCC-6303","Cyanobacteriia_unclassified","Nodularia_PCC-9350","Oscillatoria","Planktothrix_NIVA-CYA_15","Tychonema_CCAP_1459-11B","uncultured","Cyanobacteriales_unclassified","Aphanizomenon_NIES81","Leptolyngbyaceae_ge","Synechocystis_PCC-6803"),] <- c("#008C76","#00A087","#40B8A5","#80D0C3","#9FDBD2","#BFE7E1","#DFF3F0","grey","#007865","#005044","#60C4B4","#BFE7E1")
+  
+
+# Supplementary Figure cyanobacteria cDNA
+TopN <- names(sort(taxa_sums(cyano.cDNA), decreasing=TRUE)[1:10])
+df.topN <- cyano.cDNA %>%
+  psmelt() %>%    # Transform to long format, NB. creates column Sample from rownames
+  mutate(Genus = case_when(!OTU %in% TopN ~ "Other cyanobacteria",
+                           TRUE ~ as.character(Genus))) %>% 
+  mutate(across(.cols = where(is.character), .fns = as.factor)) %>% 
+    mutate(Genus = factor(Genus, c("Other cyanobacteria",levels(Genus)[-grep("Other cyanobacteria|uncultured",levels(Genus))], "uncultured")))
+nlevels=length(levels(df.topN$Genus))
+colorPalette <- taxonomy.cyanoCol %>% 
+    rownames_to_column(var = "Taxa") %>% 
+    filter(Taxa %in% (df.topN %>% pull(Genus))) %>% 
+    arrange(Taxa) %>% 
+    pull(Color)
+
+dummy_cdna <- data.frame(Sample = c("LP_ICE_21_Core1_100-110blank","LP_ICE_21_Core3_100-110blank","LP_ICE_21_Core1_0-10","LP_ICE_21_Core3_0-10","LP_ICE_21_Core3_40-50"),
+                    Depth2 = c("100-110","100-110","90-100","90-100","50-60"),
+                    Abundance = c(0,0,0,0,0),
+                    Genus = "Other cyanobacteria") %>% 
+  mutate(Depth2 = factor(Depth2, c("100-110","90-100","50-60"))) 
+# data.frame(Sample = c("LP_ICE_21_Core1_100-110blank","LP_ICE_21_Core3_100-110blank"),
+#                         SampleName2 = c("Core1_100-110blank","Core3_100-110blank"),
+#                         Depth2 = c("100-110","100-110"),
+#                         Abundance = c(0,0),
+#                         Genus = "Other cyanobacteria") %>% 
+#   mutate(Depth2 = as.factor(Depth2))
+
+(plot.cyano.cDNA <- ggplot(data = df.topN %>% mutate(Sample = as.character(Sample)),
+                          aes(x = Sample, y = Abundance, fill = Genus)) +
+    geom_bar(stat="identity",
+             width = 0.9) + #colour = "black"
+    labs(fill = element_blank(), y = "Relative Abundance (%)") +
+    scale_fill_manual(values = c("#d3d3d3",colorPalette[1:nlevels])) +
+    theme_bw() +
+    theme(axis.text.x = element_text(angle = 90, hjust=1, vjust=0.5),
+          panel.grid.major.x = element_blank()) +
+  facet_grid(.~Depth2, space = "free", scale="free") +
+  theme(axis.ticks = element_blank(),
+        panel.border = element_blank(),
+        axis.title.x = element_blank(),
+        strip.background = element_blank()) +
+  geom_blank(data = dummy_cdna))
+```
+
+![](BriefReport_Reproducible_code_files/figure-gfm/Cyanobacteria%20abundances-2.png)<!-- -->
+
+``` r
+# Supplementary Figure cyanobacteria DNA
+TopN <- names(sort(taxa_sums(cyano), decreasing=TRUE)[1:10])
+df.topN <- cyano %>%
+  psmelt() %>%    # Transform to long format, NB. creates column Sample from rownames
+  mutate(Genus = case_when(!OTU %in% TopN ~ "Other cyanobacteria",
+                           TRUE ~ as.character(Genus))) %>% 
+  mutate(across(.cols = where(is.character), .fns = as.factor)) %>% 
+    mutate(Genus = factor(Genus, c("Other cyanobacteria",levels(Genus)[-grep("Other cyanobacteria|uncultured",levels(Genus))], "uncultured")))
+nlevels=length(levels(df.topN$Genus))
+colorPalette <- taxonomy.cyanoCol %>% 
+    rownames_to_column(var = "Taxa") %>% 
+    filter(Taxa %in% (df.topN %>% pull(Genus))) %>% 
+    arrange(Taxa) %>% 
+    pull(Color)
+
+dummy_dna <- data.frame(Sample = c("LP_ICE_21_Core1_100-110blank","LP_ICE_21_Core3_100-110blank"),
+                        Depth2 = c("100-110","100-110"),
+                        Abundance = c(0,0),
+                        Genus = "Other cyanobacteria") %>% 
+  mutate(Depth2 = as.factor(Depth2))
+
+
+(plot.cyano.DNA <- ggplot(data = df.topN %>% mutate(Sample = as.character(Sample)),
+       aes(x = Sample, y = Abundance, fill = Genus)) +
+    geom_bar(stat="identity",
+             width = 0.9) + #colour = "black"
+    labs(fill = element_blank(), y = "Relative Abundance (%)") +
+    scale_fill_manual(values = c("#d3d3d3",colorPalette[1:nlevels])) +
+    theme_bw() +
+    theme(axis.text.x = element_text(angle = 90, hjust=1, vjust=0.5),
+          panel.grid.major.x = element_blank()) +
+  geom_blank(data = dummy_dna) +
+  facet_grid(.~Depth2, space = "free", scale="free") +
+  theme(axis.ticks = element_blank(),
+        panel.border = element_blank(),
+        axis.title.x = element_blank(),
+        strip.background = element_blank(),
+        # strip.text.x = element_blank()
+        ))
+```
+
+![](BriefReport_Reproducible_code_files/figure-gfm/Cyanobacteria%20abundances-3.png)<!-- -->
+
+``` r
+ggsave("~/Desktop/SupplementaryFigure5A.pdf", plot.cyano.cDNA + theme(legend.position = "none"),width = 3.5, height = 4)
+ggsave("~/Desktop/SupplementaryFigure5A_legend.pdf", plot.cyano.cDNA)
+ggsave("~/Desktop/SupplementaryFigure4B.pdf", plot.cyano.DNA + theme(legend.position = "none"),width = 3.5, height = 4)
+ggsave("~/Desktop/SupplementaryFigure4B_legend.pdf", plot.cyano.DNA)
+```
+
+## 4.6-Abundance of *Sulfurimonas* and *Thiomicrorhabdus* dominant ASVs
+
+Depends on the definition of the bottom core. We define the bottom core
+as the ice core samples where the genus *Sulfurimonas* becomes dominant.
 
 ``` r
 # Plotting taxonomy at the ASV level, we see the two dominant SOB genera are represented by three ASVs
@@ -2430,7 +2796,7 @@ LP.ICE.DNA.rar %>%
     ##  8 LP_ICE_21_Core1_0-10  Ice_core           0.171 
     ##  9 LP_ICE_21_Core1_10-20 Ice_core           0.0178
     ## 10 LP_ICE_21_Core1_20-30 Ice_core           0.273 
-    ## # … with 31 more rows
+    ## # ℹ 31 more rows
 
 ``` r
 LP.ICE.cDNA.rar %>% 
@@ -2462,11 +2828,11 @@ LP.ICE.cDNA.rar %>%
     ##  8 LP_ICE_21_Core1_20-30 Ice_core           5.51  
     ##  9 LP_ICE_21_Core1_30-40 Ice_core           1.18  
     ## 10 LP_ICE_21_Core1_40-50 Ice_core           0.701 
-    ## # … with 27 more rows
+    ## # ℹ 27 more rows
 
-## 4.5-ANME-SRB correlations: **Supplementary Information**
+## 4.7-ANME-SRB correlations: **Supplementary Information**
 
-### 4.5.1. Plot ANME and SEEP-SRB1 abundances
+### 4.7.1.-Plot ANME and SEEP-SRB1 abundances
 
 ``` r
 # DNA
@@ -2528,7 +2894,7 @@ searchTaxa(LP.ICE.cDNA.rar, "SEEP-SRB1", "Genus") %>%
 
 ![](BriefReport_Reproducible_code_files/figure-gfm/Plot%20abundance%20of%20ANMEs%20and%20SEEP-SRB1-4.png)<!-- -->
 
-### 4.5.2. DNA
+### 4.7.2.-DNA
 
 ``` r
 ANME1a <- searchTaxa(LP.ICE.DNA.rar, "ANME-1a", "Genus") %>% 
@@ -2612,13 +2978,15 @@ ANME1a.SEEP <- ANME1a %>%
   filter(WinterGroup != "Snow")
 ```
 
-    ## Joining, by = c("Sample", "SampleName", "Depth2", "WinterGroup")
+    ## Joining with `by = join_by(Sample, SampleName, Depth2, WinterGroup)`
 
 ``` r
 ANME1a.SEEP %>% 
-  ggplot(aes(x = ANME1a_abundance, y = SEEP_SRB1_abundance)) +
+  ggplot(aes(x = ANME1a_abundance, y = SEEP_SRB1_abundance, col = WinterGroup, group = NA)) +
   geom_point() +
-  geom_smooth(method = "lm") +
+  geom_smooth(method = "lm", linewidth = .5, color = "gray30") +
+  scale_colour_manual(values=c("#4DBBD5FF","#E64B35FF","#3C5488FF")) +
+  # geom_label_repel(aes(label = SampleName)) +
   theme_bw()
 ```
 
@@ -2647,7 +3015,7 @@ ANME2a2b.SEEP <- ANME2a2b %>%
   filter(WinterGroup != "Snow")
 ```
 
-    ## Joining, by = c("Sample", "SampleName", "Depth2", "WinterGroup")
+    ## Joining with `by = join_by(Sample, SampleName, Depth2, WinterGroup)`
 
 ``` r
 ANME2a2b.SEEP %>% 
@@ -2678,7 +3046,7 @@ cor.test(ANME2a2b.SEEP$ANME2a2b_abundance, ANME2a2b.SEEP$SEEP_SRB1_abundance, me
     ##       rho 
     ## 0.1876385
 
-### 4.5.2. cDNA
+### 4.7.2.-cDNA
 
 ``` r
 ANME1a <- searchTaxa(LP.ICE.cDNA.rar, "ANME-1a", "Genus") %>% 
@@ -2726,13 +3094,14 @@ ANME1a.SEEP <- ANME1a %>%
   filter(WinterGroup != "Snow") # For ecological relevance, removing the Snow samples from the computations
 ```
 
-    ## Joining, by = c("Sample", "SampleName", "Depth2", "WinterGroup")
+    ## Joining with `by = join_by(Sample, SampleName, Depth2, WinterGroup)`
 
 ``` r
 ANME1a.SEEP %>% 
-  ggplot(aes(x = ANME1a_abundance, y = SEEP_SRB1_abundance)) +
+  ggplot(aes(x = ANME1a_abundance, y = SEEP_SRB1_abundance, col = WinterGroup, group = NA)) +
   geom_point() +
-  geom_smooth(method = "lm") +
+  geom_smooth(method = "lm", linewidth = .5, color = "gray30") +
+  scale_colour_manual(values=c("#4DBBD5FF","#E64B35FF","#3C5488FF")) +
   theme_bw()
 ```
 
@@ -2761,13 +3130,14 @@ ANME2a2b.SEEP <- ANME2a2b %>%
   filter(WinterGroup != "Snow") 
 ```
 
-    ## Joining, by = c("Sample", "SampleName", "Depth2", "WinterGroup")
+    ## Joining with `by = join_by(Sample, SampleName, Depth2, WinterGroup)`
 
 ``` r
 ANME2a2b.SEEP %>% 
-  ggplot(aes(x = ANME2a2b_abundance, y = SEEP_SRB1_abundance)) +
+  ggplot(aes(x = ANME2a2b_abundance, y = SEEP_SRB1_abundance, col = WinterGroup, group = NA)) +
   geom_point() +
-  geom_smooth(method = "lm") +
+  geom_smooth(method = "lm", linewidth = .5, color = "gray30") +
+  scale_colour_manual(values=c("#4DBBD5FF","#E64B35FF","#3C5488FF")) +
   theme_bw()
 ```
 
@@ -2788,3 +3158,400 @@ cor.test(ANME2a2b.SEEP$ANME2a2b_abundance, ANME2a2b.SEEP$SEEP_SRB1_abundance, me
     ## sample estimates:
     ##       rho 
     ## 0.2681452
+
+``` r
+# DNA
+SEEP.SRB1.DNA <- searchTaxa(LP.ICE.DNA.rar, "SEEP-SRB1", "Genus") %>% 
+  rownames() %>% 
+  unique() %>% 
+  subsetPhyseq(LP.ICE.DNA.rar, .) %>% 
+  psmelt() %>% 
+  group_by(Sample,SampleName,Depth2,WinterGroup) %>% 
+  summarize(SEEP_SRB1_abundance = sum(Abundance)) %>% 
+  mutate(Dataset = as.factor("DNA"))
+```
+
+    ## `summarise()` has grouped output by 'Sample', 'SampleName', 'Depth2'. You can
+    ## override using the `.groups` argument.
+
+``` r
+ANME1a.DNA <- searchTaxa(LP.ICE.DNA.rar, "ANME-1a", "Genus") %>% 
+  rownames() %>% 
+  unique() %>% 
+  subsetPhyseq(LP.ICE.DNA.rar, .) %>% 
+  psmelt() %>% 
+  group_by(Sample,SampleName,Depth2,WinterGroup) %>% 
+  summarize(ANME1a_abundance = sum(Abundance)) %>% 
+  mutate(Dataset = as.factor("DNA"))
+```
+
+    ## `summarise()` has grouped output by 'Sample', 'SampleName', 'Depth2'. You can
+    ## override using the `.groups` argument.
+
+``` r
+ANME2a2b.DNA <- searchTaxa(LP.ICE.DNA.rar, "ANME-2a-2b", "Genus") %>% 
+  rownames() %>% 
+  unique() %>% 
+  subsetPhyseq(LP.ICE.DNA.rar, .) %>% 
+  psmelt() %>% 
+  group_by(Sample,SampleName,Depth2,WinterGroup) %>% 
+  summarize(ANME2a2b_abundance = sum(Abundance)) %>% 
+  mutate(Dataset = as.factor("DNA"))
+```
+
+    ## `summarise()` has grouped output by 'Sample', 'SampleName', 'Depth2'. You can
+    ## override using the `.groups` argument.
+
+``` r
+# cDNA
+SEEP.SRB1.cDNA <- searchTaxa(LP.ICE.cDNA.rar, "SEEP-SRB1", "Genus") %>% 
+  rownames() %>% 
+  unique() %>% 
+  subsetPhyseq(LP.ICE.cDNA.rar, .) %>% 
+  psmelt() %>% 
+  group_by(Sample,SampleName,Depth2,WinterGroup) %>% 
+  summarize(SEEP_SRB1_abundance = sum(Abundance)) %>% 
+  mutate(Dataset = as.factor("cDNA"))
+```
+
+    ## `summarise()` has grouped output by 'Sample', 'SampleName', 'Depth2'. You can
+    ## override using the `.groups` argument.
+
+``` r
+ANME1a.cDNA <- searchTaxa(LP.ICE.cDNA.rar, "ANME-1a", "Genus") %>% 
+  rownames() %>% 
+  unique() %>% 
+  subsetPhyseq(LP.ICE.cDNA.rar, .) %>% 
+  psmelt() %>% 
+  group_by(Sample,SampleName,Depth2,WinterGroup) %>% 
+  summarize(ANME1a_abundance = sum(Abundance)) %>% 
+  mutate(Dataset = as.factor("cDNA"))
+```
+
+    ## `summarise()` has grouped output by 'Sample', 'SampleName', 'Depth2'. You can
+    ## override using the `.groups` argument.
+
+``` r
+ANME2a2b.cDNA <- searchTaxa(LP.ICE.cDNA.rar, "ANME-2a-2b", "Genus") %>% 
+  rownames() %>% 
+  unique() %>% 
+  subsetPhyseq(LP.ICE.cDNA.rar, .) %>% 
+  psmelt() %>% 
+  group_by(Sample,SampleName,Depth2,WinterGroup) %>% 
+  summarize(ANME2a2b_abundance = sum(Abundance)) %>% 
+  mutate(Dataset = as.factor("cDNA"))
+```
+
+    ## `summarise()` has grouped output by 'Sample', 'SampleName', 'Depth2'. You can
+    ## override using the `.groups` argument.
+
+``` r
+# Join tables
+SRB.ANME.DNA <- SEEP.SRB1.DNA %>% 
+  full_join(ANME1a.DNA) %>% 
+  full_join(ANME2a2b.DNA) 
+```
+
+    ## Joining with `by = join_by(Sample, SampleName, Depth2, WinterGroup, Dataset)`
+    ## Joining with `by = join_by(Sample, SampleName, Depth2, WinterGroup, Dataset)`
+
+``` r
+SRB.ANME.cDNA <- SEEP.SRB1.cDNA %>% 
+  full_join(ANME1a.cDNA) %>% 
+  full_join(ANME2a2b.cDNA)
+```
+
+    ## Joining with `by = join_by(Sample, SampleName, Depth2, WinterGroup, Dataset)`
+    ## Joining with `by = join_by(Sample, SampleName, Depth2, WinterGroup, Dataset)`
+
+``` r
+SRB.ANME <- bind_rows(SRB.ANME.DNA,SRB.ANME.cDNA)
+
+# Check normality
+SRB.ANME %>%
+  ungroup() %>% 
+  select(c(Sample, SEEP_SRB1_abundance, ANME1a_abundance, ANME2a2b_abundance, Dataset)) %>% 
+  pivot_longer(cols = contains("abundance"), values_to = "Abundance", names_to = "Genus") %>% 
+  group_by(Dataset, Genus) %>%
+  group_modify(~ modified_shapiro_test(.x$Abundance)) %>%
+  filter(p.value <= 0.05) # Non gaussian data for all groups
+```
+
+    ## # A tibble: 6 × 4
+    ## # Groups:   Dataset, Genus [6]
+    ##   Dataset Genus                 p.value statistic
+    ##   <fct>   <chr>                   <dbl>     <dbl>
+    ## 1 DNA     ANME1a_abundance    0.00112       0.894
+    ## 2 DNA     ANME2a2b_abundance  0.0000741     0.850
+    ## 3 DNA     SEEP_SRB1_abundance 0.00367       0.911
+    ## 4 cDNA    ANME1a_abundance    0.0284        0.933
+    ## 5 cDNA    ANME2a2b_abundance  0.000559      0.873
+    ## 6 cDNA    SEEP_SRB1_abundance 0.00150       0.889
+
+``` r
+# Draw figure
+## ANME 1a
+(plot.SRB.ANME1a.corr <- SRB.ANME %>% 
+  filter(WinterGroup != "Snow") %>% 
+  ggplot() +
+  geom_point(aes(x = ANME1a_abundance, y = SEEP_SRB1_abundance, col = WinterGroup, shape = Dataset, group = Dataset)) +
+  geom_smooth(aes(x = ANME1a_abundance, y = SEEP_SRB1_abundance, group = Dataset),
+              method = "lm", linewidth = .5, color = "gray30") +
+  scale_colour_manual(values=c("#4DBBD5FF","#E64B35FF","#3C5488FF")) +
+  labs(x = "ANME 1a relative abundance (%)", y = "SEEP-SRB1 relative abundance (%)") +
+  theme_bw() +
+  theme(panel.border = element_blank(),
+        panel.background = element_blank(),
+        axis.line = element_line(colour = "black", linewidth = .2),
+        axis.ticks = element_line(linewidth = .2),
+        legend.position = "none"))
+```
+
+    ## `geom_smooth()` using formula = 'y ~ x'
+
+![](BriefReport_Reproducible_code_files/figure-gfm/Supplementary%20Figure%208-1.png)<!-- -->
+
+``` r
+## ANME2a-2b
+(plot.SRB.ANME2ab.corr <-SRB.ANME %>% 
+  filter(WinterGroup != "Snow") %>% 
+  ggplot() +
+  geom_point(aes(x = ANME2a2b_abundance, y = SEEP_SRB1_abundance, col = WinterGroup, shape = Dataset, group = Dataset)) +
+  geom_smooth(aes(x = ANME2a2b_abundance, y = SEEP_SRB1_abundance, group = Dataset),
+              method = "lm", linewidth = .5, color = "gray30") +
+  scale_colour_manual(values=c("#4DBBD5FF","#E64B35FF","#3C5488FF")) +
+  labs(x = "ANME 2a-2b relative abundance (%)", y = "SEEP-SRB1 relative abundance (%)") +
+  theme_bw() +
+  theme(panel.border = element_blank(),
+        panel.background = element_blank(),
+        axis.line = element_line(colour = "black", linewidth = .2),
+        axis.ticks = element_line(linewidth = .2),
+        legend.position = "none"))
+```
+
+    ## `geom_smooth()` using formula = 'y ~ x'
+
+![](BriefReport_Reproducible_code_files/figure-gfm/Supplementary%20Figure%208-2.png)<!-- -->
+
+``` r
+ggsave("~/Desktop/SupplementaryFigure8A.pdf", plot.SRB.ANME1a.corr, width = 5, height = 3)
+ggsave("~/Desktop/SupplementaryFigure8B.pdf", plot.SRB.ANME2ab.corr, width = 5, height = 3)
+```
+
+## 4.8-DNA/cDNA discrepancy for SR/SO: **Supplementary Information**
+
+``` r
+########## SRB ##########
+
+SEEP.SRB1 <- searchTaxa(LP.ICE.DNA.rar, "SEEP-SRB1", "Genus") %>% 
+  rownames() %>% 
+  unique() %>% 
+  subsetPhyseq(LP.ICE.DNA.rar, .) %>% 
+  psmelt() %>% 
+  group_by(Sample,SampleName,Depth2,WinterGroup) %>% 
+  summarize(SEEP_SRB1_abundance = sum(Abundance))
+```
+
+    ## `summarise()` has grouped output by 'Sample', 'SampleName', 'Depth2'. You can
+    ## override using the `.groups` argument.
+
+``` r
+SEEP.SRB1.cDNA <- searchTaxa(LP.ICE.cDNA.rar, "SEEP-SRB1", "Genus") %>% 
+  rownames() %>% 
+  unique() %>% 
+  subsetPhyseq(LP.ICE.cDNA.rar, .) %>% 
+  psmelt() %>% 
+  group_by(Sample,SampleName,Depth2,WinterGroup) %>% 
+  summarize(SEEP_SRB1_abundance = sum(Abundance))
+```
+
+    ## `summarise()` has grouped output by 'Sample', 'SampleName', 'Depth2'. You can
+    ## override using the `.groups` argument.
+
+``` r
+SEEP.SRB1.discrepancy <- SEEP.SRB1 %>% 
+  rename(SEEP_SRB1_abundance_DNA = SEEP_SRB1_abundance) %>%
+  left_join(SEEP.SRB1.cDNA %>% rename(SEEP_SRB1_abundance_cDNA = SEEP_SRB1_abundance)) %>% 
+  mutate(Discrepancy = SEEP_SRB1_abundance_cDNA/SEEP_SRB1_abundance_DNA) %>% 
+  left_join(samples)
+```
+
+    ## Joining with `by = join_by(Sample, SampleName, Depth2, WinterGroup)`
+    ## Joining with `by = join_by(Sample, SampleName, WinterGroup)`
+
+``` r
+# dummy <- data.frame(
+#   SampleName = c("LP_ICE_21_Dummy1_100-110","LP_ICE_21_Dummy3_100-110"),
+#   Depth2 = c("100-110","100-110"),
+#   Feature = as.factor(c("Core1","Core3")),
+#   Discrepancy = c(0,0)
+# ) %>% 
+#   mutate(Depth2 = as.factor(Depth2))
+
+SEEP.SRB1.discrepancy %>% 
+  filter(Environment != "Snow") %>% 
+  ggplot(aes(x = Sample, y = Discrepancy, fill = Feature)) +
+  geom_col(stat = 'identity',
+           position = position_dodge2(preserve = 'single'),
+           colour = "transparent",
+           size = 0.2,
+           alpha = 0.85,
+           width = .95) +
+  geom_text(data = SEEP.SRB1.discrepancy %>%
+              group_by(Depth2) %>%
+              mutate(Mean_SEEP_abundance_DNA = mean(SEEP_SRB1_abundance_DNA),
+                     y = max(Discrepancy, na.rm = TRUE)) %>%
+              ungroup() %>%
+              filter(grepl("Core2|Water2", SampleName)) %>%
+              filter(Depth2 != "Snow"),
+            aes(x = SampleName, y = y+0.3, label = round(Mean_SEEP_abundance_DNA, digits = 2)),
+            size = 2) +
+  geom_blank(data = data.frame(Sample = c("LP_ICE_21_Core1_blank","LP_ICE_21_Core3_blank"),
+                        Discrepancy = c(0,0),
+                        Feature = c("Core1","Core3"),
+                        Depth2 = c("100-110","100-110")) %>% 
+               mutate(Depth2 = factor(Depth2, levels = levels(SEEP.SRB1.discrepancy$Depth2))) %>% 
+              mutate(Feature = factor(Feature, levels = levels(SEEP.SRB1.discrepancy$Feature))))  +
+  facet_grid(cols = vars(Depth2), scales = "free") +
+  labs(y = "SEEP-SRB1 cDNA/DNA abundance ratio", x = "") +
+  scale_fill_manual(values = c(pal_npg()(6)[4:6],rep("grey50",3))) +
+  # scale_y_log10() +
+  theme_bw() +
+  theme(panel.grid.major.x = element_blank(),
+        axis.ticks = element_blank(),
+        panel.border = element_blank(),
+        strip.background = element_blank(),
+        panel.spacing = unit(.3,"line")) +
+  geom_hline(yintercept = 1, linewidth = .4, colour = "black", linetype = "dashed", alpha = 1)
+```
+
+    ## Warning in geom_col(stat = "identity", position = position_dodge2(preserve =
+    ## "single"), : Ignoring unknown parameters: `stat`
+
+    ## Warning: Removed 3 rows containing missing values or values outside the scale range
+    ## (`geom_col()`).
+
+![](BriefReport_Reproducible_code_files/figure-gfm/Supplementary%20Figure%206-1.png)<!-- -->
+
+``` r
+ggsave("~/Desktop/SupplementaryFigure4A.pdf", width = 5.5, height = 3.5)
+```
+
+    ## Warning: Removed 3 rows containing missing values or values outside the scale range
+    ## (`geom_col()`).
+
+``` r
+######### SOB ########
+
+SOB <- searchTaxa(LP.ICE.DNA.rar, "Sulfurimonas|Thiomicrorhabdus", "Genus") %>% 
+  rownames() %>% 
+  unique() %>% 
+  subsetPhyseq(LP.ICE.DNA.rar, .) %>% 
+  psmelt() %>% 
+  group_by(Sample,SampleName,Depth2,WinterGroup) %>% 
+  summarize(SOB_abundance = sum(Abundance))
+```
+
+    ## `summarise()` has grouped output by 'Sample', 'SampleName', 'Depth2'. You can
+    ## override using the `.groups` argument.
+
+``` r
+SOB.cDNA <- searchTaxa(LP.ICE.cDNA.rar, "Sulfurimonas|Thiomicrorhabdus", "Genus") %>% 
+  rownames() %>% 
+  unique() %>% 
+  subsetPhyseq(LP.ICE.cDNA.rar, .) %>% 
+  psmelt() %>% 
+  group_by(Sample,SampleName,Depth2,WinterGroup) %>% 
+  summarize(SOB_abundance = sum(Abundance))
+```
+
+    ## `summarise()` has grouped output by 'Sample', 'SampleName', 'Depth2'. You can
+    ## override using the `.groups` argument.
+
+``` r
+SOB.discrepancy <- SOB %>% 
+  rename(SOB_abundance_DNA = SOB_abundance) %>%
+  left_join(SOB.cDNA %>% rename(SOB_abundance_cDNA = SOB_abundance)) %>% 
+  mutate(Discrepancy = SOB_abundance_cDNA/SOB_abundance_DNA) %>% 
+  left_join(samples) 
+```
+
+    ## Joining with `by = join_by(Sample, SampleName, Depth2, WinterGroup)`
+    ## Joining with `by = join_by(Sample, SampleName, WinterGroup)`
+
+``` r
+SOB.discrepancy %>% 
+  filter(Environment != "Snow") %>% 
+  ggplot() +
+  geom_col(aes(x = Sample, y = Discrepancy, fill = Feature),
+           stat = 'identity',
+           position = position_dodge2(preserve = 'single'),
+           colour = "transparent",
+           size = 0.2,
+           alpha = 0.85,
+           width = .95) +
+  geom_text(data = SOB.discrepancy %>%
+              group_by(Depth2) %>%
+              mutate(Mean_SOB_abundance_DNA = mean(SOB_abundance_DNA),
+                     y = max(Discrepancy, na.rm = TRUE)) %>%
+              ungroup() %>%
+              filter(grepl("Core2|Water2", SampleName)) %>%
+              filter(Depth2 != "Snow"),
+            aes(x = SampleName, y = y+1, label = round(Mean_SOB_abundance_DNA, digits = 2), # paste0(round(Mean_SOB_abundance_DNA, digits = 2), " %")
+                #angle = 90
+                ),
+            size = 2) +
+  geom_blank(data = data.frame(Sample = c("LP_ICE_21_Core1_blank","LP_ICE_21_Core3_blank"),
+                        Discrepancy = c(0,0),
+                        Feature = c("Core1","Core3"),
+                        Depth2 = c("100-110","100-110")) %>% 
+               mutate(Depth2 = factor(Depth2, levels = levels(SOB.discrepancy$Depth2))) %>% 
+              mutate(Feature = factor(Feature, levels = levels(SOB.discrepancy$Feature))),
+             aes(x = Sample, y = Discrepancy, fill = Feature)) +
+  facet_grid(cols = vars(Depth2), scales = "free") +
+  ylim(c(0,24)) +
+  labs(y = "SOB cDNA/DNA abundance ratio", x = "") +
+  scale_fill_manual(values = c(pal_npg()(6)[4:6],rep("grey50",3))) +
+  # scale_y_log10() +
+  theme_bw() +
+  theme(panel.grid.major.x = element_blank(),
+        axis.ticks = element_blank(),
+        panel.border = element_blank(),
+        strip.background = element_blank(),
+        panel.spacing = unit(.3,"line")) +
+  geom_hline(yintercept = 1, linewidth = .4, colour = "black", linetype = "dashed", alpha = 1)
+```
+
+    ## Warning in geom_col(aes(x = Sample, y = Discrepancy, fill = Feature), stat = "identity", : Ignoring unknown parameters: `stat`
+    ## Removed 3 rows containing missing values or values outside the scale range
+    ## (`geom_col()`).
+
+![](BriefReport_Reproducible_code_files/figure-gfm/Supplementary%20Figure%206-2.png)<!-- -->
+
+``` r
+ggsave("~/Desktop/SupplementaryFigure4B.pdf", width = 5.5, height = 3.5)
+```
+
+    ## Warning: Removed 3 rows containing missing values or values outside the scale range
+    ## (`geom_col()`).
+
+``` r
+######### SRB/SOB #########
+
+# SEEP.SRB1.discrepancy %>% 
+#   # mutate(Type = "SRB") %>%
+#   rename(Discrepancy_SRB = Discrepancy) %>% 
+#   #rename(Abundance_DNA = SEEP_SRB1_abundance_DNA,
+#   #       Abundance_cDNA = SEEP_SRB1_abundance_cDNA) %>% 
+#   inner_join(SOB.discrepancy %>% 
+#                rename(Discrepancy_SOB = Discrepancy)) %>% 
+#                # mutate(Type = "SOB") %>% 
+#                # rename(Abundance_DNA = SOB_abundance_DNA,
+#                       # Abundance_cDNA = SOB_abundance_cDNA)) %>% 
+#   filter(Environment != "Snow") %>% 
+#   mutate(Discrepancy_SRB_SOB = Discrepancy_SRB/Discrepancy_SOB) %>% 
+#   ggplot() +
+#   geom_bar(aes(x = Depth2, y = Discrepancy_SRB_SOB, fill = Feature),
+#            stat = "identity",
+#            position = position_dodge2())
+```
