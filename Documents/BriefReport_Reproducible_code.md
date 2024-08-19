@@ -1,4 +1,5 @@
-MethanIce_BriefReport_Reproducible_Code
+Reproducible code for ‘Chemolithoautotrophic bacteria flourish at dark
+water-ice interfaces of an emerged Arctic cold seep’
 ================
 Lisa-Marie Delpech
 2023-09-12
@@ -80,8 +81,8 @@ objects, and performing rarefaction for the following analyses.
 The second section examines diversity and reproduces **Figure 1A** of
 the manuscript (beta diversity), the third section reproduces **Figure
 1B** (alpha diversity), and the fourth section examines taxonomic
-composition and reproduces **Figure 1C**. Numbers presented in the Brief
-Report and its **Supplementary Information** are also given.
+composition and reproduces **Figure 1C**. Numbers and stats presented in
+the Brief Report and its **Supplementary Information** are also given.
 
 Built with R 4.4.1.
 
@@ -1724,7 +1725,8 @@ shannon.ice <- alpha.cdna %>%
   theme(axis.title = element_blank(),
         legend.title = element_blank(),
         panel.grid = element_blank(),
-        axis.ticks.y = element_blank()))
+        axis.ticks.y = element_blank(),
+        axis.text.x = element_text(color="black")))
 ```
 
 ![](BriefReport_Reproducible_code_files/figure-gfm/Compute%20alpha%20diversity-1.png)<!-- -->
@@ -1969,7 +1971,7 @@ dummy <- data.frame(WinterGroup = factor(rep(c("Snow","Ice_core","Bottom_core","
             size = 4) +
   geom_blank(data = dummy) +
   # scale_x_continuous(limits = c(NA,2500)) +
-  theme(axis.text.y= element_text(size = 9),
+  theme(axis.text.y= element_text(size = 9, color = "black"),
         axis.ticks.x = element_line(linewidth = .2),
         legend.position = "none"))
 ```
@@ -1985,7 +1987,8 @@ ggsave("~/Desktop/Figure1B_Revised.pdf", width = 3.2, height = 2.8)
 ``` r
 observed.ice <- alpha.cdna %>% 
   mutate(Dataset = "cDNA") %>% 
-  full_join(alpha.dna %>% mutate(Dataset = "DNA")) %>% 
+  full_join(
+    alpha.dna %>% mutate(Dataset = "DNA")) %>% 
   filter(AlphaMeasure == "Observed")
 ```
 
@@ -2147,7 +2150,8 @@ dummy <- data.frame(WinterGroup = factor(rep(c("Snow","Ice_core","Bottom_core","
             size = 4) +
   geom_blank(data = dummy) +
   # scale_x_continuous(limits = c(NA,2500)) +
-  theme(axis.text.y= element_text(size = 9),
+  theme(axis.text.y= element_text(size = 9, color = "black"),
+        axis.text.x = element_text(color = "black"),
         axis.ticks.x = element_line(linewidth = .2),
         legend.position = "none"))
 ```
@@ -2300,6 +2304,7 @@ dummy_dna <- data.frame(SampleName = c("LP_ICE_21_Core1_100-110blank","LP_ICE_21
     theme(axis.ticks = element_blank(),
           panel.border = element_blank(),
           axis.title.x = element_blank(),
+          axis.text.y = element_text(color = "black"),
           panel.grid.major.x = element_blank(),
           strip.background = element_blank(),
           panel.spacing = unit(.03, "lines"))
@@ -2372,6 +2377,7 @@ dummy_cdna <- data.frame(SampleName = c("LP_ICE_21_Snow7","LP_ICE_21_Core1_100-1
   theme(axis.ticks = element_blank(),
         panel.border = element_blank(),
         axis.title.x = element_blank(),
+        axis.text.y = element_text(color = "black"),
         strip.background = element_blank(),
         panel.spacing = unit(.03, "lines"))
 )
@@ -2743,8 +2749,8 @@ dummy_dna <- data.frame(Sample = c("LP_ICE_21_Core1_100-110blank","LP_ICE_21_Cor
 ``` r
 ggsave("~/Desktop/SupplementaryFigure5A.pdf", plot.cyano.cDNA + theme(legend.position = "none"),width = 3.5, height = 4)
 ggsave("~/Desktop/SupplementaryFigure5A_legend.pdf", plot.cyano.cDNA)
-ggsave("~/Desktop/SupplementaryFigure4B.pdf", plot.cyano.DNA + theme(legend.position = "none"),width = 3.5, height = 4)
-ggsave("~/Desktop/SupplementaryFigure4B_legend.pdf", plot.cyano.DNA)
+ggsave("~/Desktop/SupplementaryFigure5B.pdf", plot.cyano.DNA + theme(legend.position = "none"),width = 3.5, height = 4)
+ggsave("~/Desktop/SupplementaryFigure5B_legend.pdf", plot.cyano.DNA)
 ```
 
 ## 4.6-Abundance of *Sulfurimonas* and *Thiomicrorhabdus* dominant ASVs
