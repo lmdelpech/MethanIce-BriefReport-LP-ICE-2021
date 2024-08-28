@@ -99,6 +99,7 @@ require(pairwiseAdonis) # https://github.com/pmartinezarbizu/pairwiseAdonis
 require(dunn.test) 
 require(pgirmess)
 require(multcompView)
+require(rlang)
 ```
 
 ## 0.2-Internal functions
@@ -317,8 +318,9 @@ plotAbundance <- function(physeq,x = Sample,
   colorPalette <- taxonomyCol %>% 
     rownames_to_column(var = "Taxa") %>% 
     filter(Taxa %in% (df.topN %>% pull({{rank}}))) %>% 
-    arrange(Taxa) %>% 
-    pull(Color)
+    column_to_rownames(var = "Taxa")
+  selectTaxa <- levels(df.topN[[as_string(ensym(rank))]])[-grep("Bacteria_unclassified",levels(df.topN[[as_string(ensym(rank))]]))]
+  colorPalette <- colorPalette[selectTaxa,] # ggplot will order colors by factor levels, therefore we need the color vector to be ordered by levels of the aesthetic that will be plotted (rank)
   }
   
   plot.abund <- ggplot(data = df,
@@ -2294,7 +2296,7 @@ dummy_dna <- data.frame(SampleName = c("LP_ICE_21_Core1_100-110blank","LP_ICE_21
            aes(x = SampleName2, y = Abundance, fill = Genus)) +
     geom_bar(stat="identity",
              width = 1, linewidth = 0) + 
-    labs(fill = element_blank(), y = "Relative Abundance (%)") +
+    labs(fill = element_blank(), y = "Relative abundance (%)") +
     scale_fill_manual(values = c(df.dna$colorPalette[1:df.dna$nlevels],"#a0a0a0")) +
     theme_bw() + 
     theme(axis.text.x = element_text(angle = 90, hjust=1, vjust=0.5)) +
@@ -2366,7 +2368,7 @@ dummy_cdna <- data.frame(SampleName = c("LP_ICE_21_Snow7","LP_ICE_21_Core1_100-1
        aes(x = SampleName2, y = Abundance, fill = Genus)) +
   geom_bar(stat="identity",
            width = 1, linewidth = 0) +
-  labs(fill = element_blank(), y = "Relative Abundance (%)") +
+  labs(fill = element_blank(), y = "Relative abundance (%)") +
   scale_fill_manual(values = c(df.cdna$colorPalette[1:df.cdna$nlevels],"#a0a0a0")) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 90, hjust=1, vjust=0.5),
