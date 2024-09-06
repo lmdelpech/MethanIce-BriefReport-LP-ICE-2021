@@ -1,6 +1,6 @@
 # Chemolithoautotrophic bacteria flourish at dark water-ice interfaces of an emerged Arctic cold seep
 
-This repository contains reproducible R code for the results reported in [Chemolithoautotrophic bacteria flourish at dark water-ice interfaces of an emerged Arctic cold seep]().
+This repository contains reproducible R code for the results reported in [Chemolithoautotrophic bacteria flourish at dark water-ice interfaces of an emerged Arctic cold seep](10.1093/ismejo/wrae170).
 It is used for the analysis of 16S amplicon data from samples collected at the Lagoon Pingo (Svalbard) in March 2021 (ice cores, water reservoir, snow).  
 
 Author: Lisa-Marie Delpech
